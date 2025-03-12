@@ -23,6 +23,10 @@ public record P2d(double x, double y) {
     	return Math.sqrt(dx*dx + dy*dy);
 
     }
+
+    public P2d mul(double fact){
+        return new P2d(x*fact,y*fact);
+    }
     
     public String toString(){
         return "P2d("+x+","+y+")";

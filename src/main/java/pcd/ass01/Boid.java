@@ -39,7 +39,7 @@ public class Boid {
     	
     	V2d separation = calculateSeparation(nearbyBoids, model);
         V2d alignment = this.functions.calculateAlignment(this, nearbyBoids);
-    	V2d cohesion = calculateCohesion(nearbyBoids, model);
+    	V2d cohesion = this.functions.calculateCohesion(this, nearbyBoids);
     	
     	vel = vel.sum(alignment.mul(model.getAlignmentWeight()))
     			.sum(separation.mul(model.getSeparationWeight()))
@@ -77,23 +77,6 @@ public class Boid {
         	}
         }
         return list;
-    }
-
-    private V2d calculateCohesion(List<Boid> nearbyBoids, BoidsModel model) {
-        double centerX = 0;
-        double centerY = 0;
-        if (nearbyBoids.size() > 0) {
-	        for (Boid other: nearbyBoids) {
-	        	P2d otherPos = other.getPos();
-	            centerX += otherPos.x();
-	            centerY += otherPos.y();
-	        }
-            centerX /= nearbyBoids.size();
-            centerY /= nearbyBoids.size();
-            return new V2d(centerX - pos.x(), centerY - pos.y()).getNormalized();
-        } else {
-        	return new V2d(0, 0);
-        }
     }
     
     private V2d calculateSeparation(List<Boid> nearbyBoids, BoidsModel model) {

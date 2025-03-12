@@ -22,7 +22,20 @@ public class BoidsFlockFunctionsImpl implements BoidsFlockFunctions{
 
     @Override
     public V2d calculateCohesion(Boid actualBoid, Collection<Boid> nearbyBoids) {
-        return null;
+        double centerX = 0;
+        double centerY = 0;
+        if (!nearbyBoids.isEmpty()) {
+            for (Boid other: nearbyBoids) {
+                P2d otherPos = other.getPos();
+                centerX += otherPos.x();
+                centerY += otherPos.y();
+            }
+            centerX /= nearbyBoids.size();
+            centerY /= nearbyBoids.size();
+            return new V2d(centerX - actualBoid.getPos().x(), centerY - actualBoid.getPos().y()).getNormalized();
+        } else {
+            return new V2d(0, 0);
+        }
     }
 
     @Override
