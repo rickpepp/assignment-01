@@ -20,6 +20,14 @@ public class Boid {
     public V2d getVel() {
     	return vel;
     }
+
+    public void setPos(P2d position) {
+        this.pos = position;
+    }
+
+    public void setVel(V2d velocity) {
+        this.vel = velocity;
+    }
     
     public void update(BoidsModel model) {
 
