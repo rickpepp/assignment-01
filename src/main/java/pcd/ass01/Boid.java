@@ -7,10 +7,12 @@ public class Boid {
 
     private P2d pos;
     private V2d vel;
+    private BoidsFlockFunctions functions;
 
     public Boid(P2d pos, V2d vel) {
     	this.pos = pos;
     	this.vel = vel;
+        this.functions = new BoidsFlockFunctionsImpl();
     }
     
     public P2d getPos() {
@@ -36,7 +38,7 @@ public class Boid {
     	List<Boid> nearbyBoids = getNearbyBoids(model);
     	
     	V2d separation = calculateSeparation(nearbyBoids, model);
-    	V2d alignment = calculateAlignment(nearbyBoids, model);
+        V2d alignment = this.functions.calculateAlignment(this, nearbyBoids);
     	V2d cohesion = calculateCohesion(nearbyBoids, model);
     	
     	vel = vel.sum(alignment.mul(model.getAlignmentWeight()))
@@ -75,23 +77,6 @@ public class Boid {
         	}
         }
         return list;
-    }
-    
-    private V2d calculateAlignment(List<Boid> nearbyBoids, BoidsModel model) {
-        double avgVx = 0;
-        double avgVy = 0;
-        if (nearbyBoids.size() > 0) {
-	        for (Boid other : nearbyBoids) {
-	        	V2d otherVel = other.getVel();
-	            avgVx += otherVel.x();
-	            avgVy += otherVel.y();
-	        }	        
-	        avgVx /= nearbyBoids.size();
-	        avgVy /= nearbyBoids.size();
-	        return new V2d(avgVx - vel.x(), avgVy - vel.y()).getNormalized();
-        } else {
-        	return new V2d(0, 0);
-        }
     }
 
     private V2d calculateCohesion(List<Boid> nearbyBoids, BoidsModel model) {
