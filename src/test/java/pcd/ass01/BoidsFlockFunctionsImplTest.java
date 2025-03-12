@@ -60,5 +60,16 @@ class BoidsFlockFunctionsImplTest {
 
     @Test
     void calculateSeparation() {
+        double avoidDistance = 50;
+        Collection<Boid> nearbyBoids = getNearbyBoids();
+        V2d expectedVelocity = new V2d((10 - 9.5), (-10 + 1)).getNormalized();
+        assertEquals(expectedVelocity, functions.calculateSeparation(boid, nearbyBoids, 10));
+    }
+
+    @Test
+    void calculateSeparationNoNearby() {
+        double avoidDistance = 50;
+        Collection<Boid> nearbyBoids = new ArrayList<>(0);
+        assertEquals(new V2d(0, 0), functions.calculateSeparation(boid, nearbyBoids, 10));
     }
 }

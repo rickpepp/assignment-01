@@ -37,7 +37,7 @@ public class Boid {
     	
     	List<Boid> nearbyBoids = getNearbyBoids(model);
     	
-    	V2d separation = calculateSeparation(nearbyBoids, model);
+    	V2d separation = this.functions.calculateSeparation(this, nearbyBoids, model.getAvoidRadius());
         V2d alignment = this.functions.calculateAlignment(this, nearbyBoids);
     	V2d cohesion = this.functions.calculateCohesion(this, nearbyBoids);
     	
@@ -77,27 +77,5 @@ public class Boid {
         	}
         }
         return list;
-    }
-    
-    private V2d calculateSeparation(List<Boid> nearbyBoids, BoidsModel model) {
-        double dx = 0;
-        double dy = 0;
-        int count = 0;
-        for (Boid other: nearbyBoids) {
-        	P2d otherPos = other.getPos();
-    	    double distance = pos.distance(otherPos);
-    	    if (distance < model.getAvoidRadius()) {
-    	    	dx += pos.x() - otherPos.x();
-    	    	dy += pos.y() - otherPos.y();
-    	    	count++;
-    	    }
-    	}
-        if (count > 0) {
-            dx /= count;
-            dy /= count;
-            return new V2d(dx, dy).getNormalized();
-        } else {
-        	return new V2d(0, 0);
-        }
     }
 }

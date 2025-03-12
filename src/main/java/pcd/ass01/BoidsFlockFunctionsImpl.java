@@ -24,7 +24,25 @@ public class BoidsFlockFunctionsImpl implements BoidsFlockFunctions{
 
     @Override
     public V2d calculateSeparation(Boid actualBoid, Collection<Boid> nearbyBoids, double avoidRadius) {
-        return null;
+        double dx = 0;
+        double dy = 0;
+        int count = 0;
+        for (Boid other: nearbyBoids) {
+            P2d otherPos = other.getPos();
+            double distance = actualBoid.getPos().distance(otherPos);
+            if (distance < avoidRadius) {
+                dx += actualBoid.getPos().x() - otherPos.x();
+                dy += actualBoid.getPos().y() - otherPos.y();
+                count++;
+            }
+        }
+        if (count > 0) {
+            dx /= count;
+            dy /= count;
+            return new V2d(dx, dy).getNormalized();
+        } else {
+            return new V2d(0, 0);
+        }
     }
 
     private V2d calculateAverageVelocity(Collection<Boid> nearbyBoids) {
