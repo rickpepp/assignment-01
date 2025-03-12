@@ -10,28 +10,45 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class BoidsFlockFunctionsImplTest {
 
+    private static final double BOID_X_POSITION = 10;
+    private static final double BOID_Y_POSITION = -10;
+    private static final double BOID_X_VELOCITY = 5;
+    private static final double BOID_Y_VELOCITY = -5;
+    private static final double BOID1_X_POSITION = 9.5;
+    private static final double BOID1_Y_POSITION = -1;
+    private static final double BOID1_X_VELOCITY = -5;
+    private static final double BOID1_Y_VELOCITY = -5.2;
+    private static final double BOID2_POSITION_AND_VELOCITY = 0;
+    private static final double BOID3_POSITION_AND_VELOCITY = 90;
+    private static final double NUMBER_OF_NEARBY = 3.0;
+    private static final double AVOID_RADIUS = 10;
+
     private BoidsFlockFunctions functions;
     private Boid boid;
 
     @BeforeEach
     void init() {
         functions = new BoidsFlockFunctionsImpl();
-        boid = new Boid(new P2d(10, -10), new V2d(5, -5));
+        boid = new Boid(new P2d(BOID_X_POSITION, BOID_Y_POSITION), new V2d(BOID_X_VELOCITY, BOID_Y_VELOCITY));
     }
 
     @Test
     void calculateAlignment() {
         Collection<Boid> nearbyBoids = getNearbyBoids();
-        V2d expectedAverageVelocity = new V2d((-5.0 + 0.0 + 90.0) / 3.0, (-5.2 + 0.0 + 90.0) / 3.0);
+        V2d expectedAverageVelocity =
+                new V2d((BOID1_X_VELOCITY + BOID2_POSITION_AND_VELOCITY + BOID3_POSITION_AND_VELOCITY) / NUMBER_OF_NEARBY,
+                    (BOID1_Y_VELOCITY + BOID2_POSITION_AND_VELOCITY + BOID3_POSITION_AND_VELOCITY) / NUMBER_OF_NEARBY);
         assertEquals(expectedAverageVelocity.sum(boid.getVel().mul(-1)).getNormalized(),
                 functions.calculateAlignment(boid, nearbyBoids));
     }
 
     private static Collection<Boid> getNearbyBoids() {
         Collection<Boid> nearbyBoids = new ArrayList<>(3);
-        nearbyBoids.add(new Boid(new P2d(9.5, -1), new V2d(-5, -5.2)));
-        nearbyBoids.add(new Boid(new P2d(0, 0), new V2d(0, 0)));
-        nearbyBoids.add(new Boid(new P2d(90, 90), new V2d(90, 90)));
+        nearbyBoids.add(new Boid(new P2d(BOID1_X_POSITION, BOID1_Y_POSITION), new V2d(BOID1_X_VELOCITY, BOID1_Y_VELOCITY)));
+        nearbyBoids.add(new Boid(new P2d(BOID2_POSITION_AND_VELOCITY, BOID2_POSITION_AND_VELOCITY),
+                new V2d(BOID2_POSITION_AND_VELOCITY, BOID2_POSITION_AND_VELOCITY)));
+        nearbyBoids.add(new Boid(new P2d(BOID3_POSITION_AND_VELOCITY, BOID3_POSITION_AND_VELOCITY),
+                new V2d(BOID3_POSITION_AND_VELOCITY, BOID3_POSITION_AND_VELOCITY)));
         return nearbyBoids;
     }
 
@@ -44,7 +61,9 @@ class BoidsFlockFunctionsImplTest {
     @Test
     void calculateCohesion() {
         Collection<Boid> nearbyBoids = getNearbyBoids();
-        P2d expectedPosition = new P2d((9.5 + 0.0 + 90.0) / 3.0, (-1.0 + 0.0 + 90.0) / 3.0);
+        P2d expectedPosition =
+                new P2d((BOID1_X_POSITION + BOID2_POSITION_AND_VELOCITY + BOID3_POSITION_AND_VELOCITY) / NUMBER_OF_NEARBY,
+                    (BOID1_Y_POSITION + BOID2_POSITION_AND_VELOCITY + BOID3_POSITION_AND_VELOCITY) / NUMBER_OF_NEARBY);
         V2d actualPosition = new V2d(boid.getPos().x(), boid.getPos().y()).mul(-1);
         expectedPosition = expectedPosition.sum(actualPosition);
         V2d expectedVelocity = new V2d(expectedPosition.x(), expectedPosition.y());
@@ -60,16 +79,14 @@ class BoidsFlockFunctionsImplTest {
 
     @Test
     void calculateSeparation() {
-        double avoidDistance = 50;
         Collection<Boid> nearbyBoids = getNearbyBoids();
-        V2d expectedVelocity = new V2d((10 - 9.5), (-10 + 1)).getNormalized();
-        assertEquals(expectedVelocity, functions.calculateSeparation(boid, nearbyBoids, 10));
+        V2d expectedVelocity = new V2d((BOID_X_POSITION - BOID1_X_POSITION), (BOID_Y_POSITION - BOID1_Y_POSITION)).getNormalized();
+        assertEquals(expectedVelocity, functions.calculateSeparation(boid, nearbyBoids, AVOID_RADIUS));
     }
 
     @Test
     void calculateSeparationNoNearby() {
-        double avoidDistance = 50;
         Collection<Boid> nearbyBoids = new ArrayList<>(0);
-        assertEquals(new V2d(0, 0), functions.calculateSeparation(boid, nearbyBoids, 10));
+        assertEquals(new V2d(0, 0), functions.calculateSeparation(boid, nearbyBoids, AVOID_RADIUS));
     }
 }
