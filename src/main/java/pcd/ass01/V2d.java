@@ -21,6 +21,10 @@ public record V2d(double x,double y) {
         return new V2d(x+v.x,y+v.y);
     }
 
+    public V2d sub(V2d v){
+        return new V2d(x-v.x,y-v.y);
+    }
+
     public double abs(){
         return (double)Math.sqrt(x*x+y*y);
     }
@@ -32,6 +36,12 @@ public record V2d(double x,double y) {
 
     public V2d mul(double fact){
         return new V2d(x*fact,y*fact);
+    }
+
+    public V2d div(double fact) {
+        if (fact == 0)
+            throw new IllegalArgumentException("Can't divide for 0");
+        return new V2d(x/fact, y/fact);
     }
 
     public String toString(){

@@ -6,20 +6,18 @@ public class BoidsFlockFunctionsImpl implements BoidsFlockFunctions{
 
     @Override
     public V2d calculateAlignment(Boid actualBoid, Collection<Boid> nearbyBoids) {
-        double avgVx = 0;
-        double avgVy = 0;
         if (!nearbyBoids.isEmpty()) {
-            for (Boid other : nearbyBoids) {
-                V2d otherVel = other.getVel();
-                avgVx += otherVel.x();
-                avgVy += otherVel.y();
-            }
-            avgVx /= nearbyBoids.size();
-            avgVy /= nearbyBoids.size();
-            return new V2d(avgVx - actualBoid.getVel().x(), avgVy - actualBoid.getVel().y()).getNormalized();
+            return calculateAverageVelocity(nearbyBoids).sub(actualBoid.getVel()).getNormalized();
         } else {
             return new V2d(0, 0);
         }
+    }
+
+    private V2d calculateAverageVelocity(Collection<Boid> nearbyBoids) {
+        return nearbyBoids.stream()
+                .map(Boid::getVel)
+                .reduce(new V2d(0, 0), V2d::sum)
+                .div(nearbyBoids.size());
     }
 
     @Override
