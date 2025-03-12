@@ -13,26 +13,10 @@ public class BoidsFlockFunctionsImpl implements BoidsFlockFunctions{
         }
     }
 
-    private V2d calculateAverageVelocity(Collection<Boid> nearbyBoids) {
-        return nearbyBoids.stream()
-                .map(Boid::getVel)
-                .reduce(new V2d(0, 0), V2d::sum)
-                .div(nearbyBoids.size());
-    }
-
     @Override
     public V2d calculateCohesion(Boid actualBoid, Collection<Boid> nearbyBoids) {
-        double centerX = 0;
-        double centerY = 0;
         if (!nearbyBoids.isEmpty()) {
-            for (Boid other: nearbyBoids) {
-                P2d otherPos = other.getPos();
-                centerX += otherPos.x();
-                centerY += otherPos.y();
-            }
-            centerX /= nearbyBoids.size();
-            centerY /= nearbyBoids.size();
-            return new V2d(centerX - actualBoid.getPos().x(), centerY - actualBoid.getPos().y()).getNormalized();
+            return new V2d(calculateAveragePosition(nearbyBoids).sub(actualBoid.getPos())).getNormalized();
         } else {
             return new V2d(0, 0);
         }
@@ -41,5 +25,19 @@ public class BoidsFlockFunctionsImpl implements BoidsFlockFunctions{
     @Override
     public V2d calculateSeparation(Boid actualBoid, Collection<Boid> nearbyBoids, double avoidRadius) {
         return null;
+    }
+
+    private V2d calculateAverageVelocity(Collection<Boid> nearbyBoids) {
+        return nearbyBoids.stream()
+                .map(Boid::getVel)
+                .reduce(new V2d(0, 0), V2d::sum)
+                .div(nearbyBoids.size());
+    }
+
+    private P2d calculateAveragePosition(Collection<Boid> nearbyBoids) {
+        return nearbyBoids.stream()
+                .map(Boid::getPos)
+                .reduce(new P2d(0, 0), P2d::sum)
+                .div(nearbyBoids.size());
     }
 }

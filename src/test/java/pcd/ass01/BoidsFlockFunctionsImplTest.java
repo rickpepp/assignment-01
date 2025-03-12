@@ -53,6 +53,12 @@ class BoidsFlockFunctionsImplTest {
     }
 
     @Test
+    void calculateCohesionNoNearby() {
+        Collection<Boid> nearbyBoids = new ArrayList<>(0);
+        assertEquals(new V2d(0, 0), functions.calculateCohesion(boid, nearbyBoids));
+    }
+
+    @Test
     void calculateSeparation() {
     }
 }

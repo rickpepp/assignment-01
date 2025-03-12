@@ -8,13 +8,26 @@ package pcd.ass01;
  */
 public record P2d(double x, double y) {
 
+    public P2d(V2d velocity) {
+        this(velocity.x(), velocity.y());
+    }
 
     public P2d sum(V2d v){
         return new P2d(x+v.x(),y+v.y());
     }
 
-    public V2d sub(P2d v){
-        return new V2d(x-v.x,y-v.y);
+    public P2d sum(P2d v){
+        return new P2d(x+v.x(),y+v.y());
+    }
+
+    public P2d div(double fact) {
+        if (fact == 0)
+            throw new IllegalArgumentException("Can't divide for 0");
+        return new P2d(x/fact, y/fact);
+    }
+
+    public P2d sub(P2d v){
+        return new P2d(x-v.x,y-v.y);
     }
     
     public double distance(P2d p) {
