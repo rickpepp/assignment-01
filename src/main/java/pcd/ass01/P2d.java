@@ -8,10 +8,6 @@ package pcd.ass01;
  */
 public record P2d(double x, double y) {
 
-    public P2d(V2d velocity) {
-        this(velocity.x(), velocity.y());
-    }
-
     public P2d sum(V2d v){
         return new P2d(x+v.x(),y+v.y());
     }
@@ -35,10 +31,6 @@ public record P2d(double x, double y) {
     	double dy = p.y - y;
     	return Math.sqrt(dx*dx + dy*dy);
 
-    }
-
-    public P2d mul(double fact){
-        return new P2d(x*fact,y*fact);
     }
     
     public String toString(){
