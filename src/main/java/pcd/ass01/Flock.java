@@ -12,6 +12,8 @@ public interface Flock {
     public double getAvoidRadius();
     public double getSeparationWeight();
     public double getAlignmentWeight();
+    public double getCohesionWeight();
     public void setSeparationWeight(double separationWeight);
     public void setAlignmentWeight(double alignmentWeight);
+    public void setCohesionWeight(double cohesionWeight);
 }

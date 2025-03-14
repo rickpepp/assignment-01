@@ -96,4 +96,21 @@ class FlockTest {
         flock.setAlignmentWeight(0);
         assertEquals(0, flock.getAlignmentWeight());
     }
+
+    @Test
+    void getCohesionWeight() {
+        Flock flock = new FlockBuilder()
+                .cohesionWeight(10)
+                .buildFlock();
+        assertEquals(10, flock.getCohesionWeight());
+    }
+
+    @Test
+    void setCohesionWeight() {
+        Flock flock = new FlockBuilder()
+                .cohesionWeight(10)
+                .buildFlock();
+        flock.setCohesionWeight(19);
+        assertEquals(19, flock.getCohesionWeight());
+    }
 }

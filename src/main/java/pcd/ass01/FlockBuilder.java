@@ -9,6 +9,7 @@ public class FlockBuilder {
     private double avoidRadius = 1;
     private double separationWeight = 1;
     private double alignmentWeight = 1;
+    private double cohesionWeight = 1;
 
     public Flock buildFlock() {
         return new FlockImpl(width,
@@ -17,7 +18,8 @@ public class FlockBuilder {
                 perceptionRadius,
                 avoidRadius,
                 separationWeight,
-                alignmentWeight);
+                alignmentWeight,
+                cohesionWeight);
     }
 
     public FlockBuilder width(double width) {
@@ -52,6 +54,11 @@ public class FlockBuilder {
 
     public FlockBuilder alignmentWeight(double alignmentWeight) {
         this.alignmentWeight = alignmentWeight;
+        return this;
+    }
+
+    public FlockBuilder cohesionWeight(double cohesionWeight) {
+        this.cohesionWeight =cohesionWeight;
         return this;
     }
 

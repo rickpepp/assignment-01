@@ -8,7 +8,6 @@ import java.util.Optional;
 public class BoidsModel {
     
     private final Flock flock;
-    private double cohesionWeight;
 
     public BoidsModel(int nboids,  
     						double initialSeparationWeight, 
@@ -19,7 +18,6 @@ public class BoidsModel {
     						double maxSpeed,
     						double perceptionRadius,
     						double avoidRadius){
-        cohesionWeight = initialCohesionWeight;
 
         this.flock = new FlockBuilder()
                 .width(width)
@@ -29,6 +27,7 @@ public class BoidsModel {
                 .avoidRadius(avoidRadius)
                 .separationWeight(initialSeparationWeight)
                 .alignmentWeight(initialAlignmentWeight)
+                .cohesionWeight(initialCohesionWeight)
                 .buildFlock();
         for (int i = 0; i < nboids; i++) {
         	P2d pos = new P2d(-this.flock.getWidth()/2 + Math.random() * this.flock.getWidth(),
@@ -75,16 +74,16 @@ public class BoidsModel {
     	this.flock.setAlignmentWeight(value);
     }
 
-    public synchronized void setCohesionWeight(double value) {
-    	this.cohesionWeight = value;
+    public void setCohesionWeight(double value) {
+    	this.flock.setCohesionWeight(value);
     }
 
     public double getSeparationWeight() {
     	return this.flock.getSeparationWeight();
     }
 
-    public synchronized double getCohesionWeight() {
-    	return cohesionWeight;
+    public double getCohesionWeight() {
+    	return this.flock.getCohesionWeight();
     }
 
     public double getAlignmentWeight() {

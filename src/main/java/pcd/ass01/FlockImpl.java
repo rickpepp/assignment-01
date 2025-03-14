@@ -13,6 +13,7 @@ public class FlockImpl implements Flock{
     private final double avoidRadius;
     private double separationWeight;
     private double alignmentWeight;
+    private double cohesionWeight;
 
     public FlockImpl(double width,
                      double height,
@@ -20,7 +21,8 @@ public class FlockImpl implements Flock{
                      double perceptionRadius,
                      double avoidRadius,
                      double separationWeight,
-                     double alignmentWeight) {
+                     double alignmentWeight,
+                     double cohesionWeight) {
         this.boids = new ArrayList<>();
         this.width = width;
         this.height = height;
@@ -29,6 +31,7 @@ public class FlockImpl implements Flock{
         this.avoidRadius = avoidRadius;
         this.separationWeight = separationWeight;
         this.alignmentWeight = alignmentWeight;
+        this.cohesionWeight = cohesionWeight;
     }
 
     @Override
@@ -77,6 +80,11 @@ public class FlockImpl implements Flock{
     }
 
     @Override
+    public synchronized double getCohesionWeight() {
+        return cohesionWeight;
+    }
+
+    @Override
     public synchronized void setSeparationWeight(double separationWeight) {
         this.separationWeight = separationWeight;
     }
@@ -84,6 +92,11 @@ public class FlockImpl implements Flock{
     @Override
     public synchronized void setAlignmentWeight(double alignmentWeight) {
         this.alignmentWeight = alignmentWeight;
+    }
+
+    @Override
+    public synchronized void setCohesionWeight(double cohesionWeight) {
+        this.cohesionWeight = cohesionWeight;
     }
 
 
