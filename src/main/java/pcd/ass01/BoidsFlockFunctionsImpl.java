@@ -1,7 +1,7 @@
 package pcd.ass01;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.stream.Collectors;
 
 public class BoidsFlockFunctionsImpl implements BoidsFlockFunctions{
 
@@ -25,14 +25,14 @@ public class BoidsFlockFunctionsImpl implements BoidsFlockFunctions{
 
     @Override
     public V2d calculateSeparation(Boid actualBoid, Collection<Boid> nearbyBoids, double avoidRadius) {
-        List<P2d> tooNearBoids = nearbyBoids.stream().map(Boid::getPos)
-                .filter(e -> actualBoid.getPos().distance(e) < avoidRadius).toList();
-        if (tooNearBoids.isEmpty())
-            return new V2d(0, 0);
-        else
-            return new V2d(tooNearBoids.stream()
-                .reduce(new P2d(0, 0), (previous, next) -> previous.sum(actualBoid.getPos().sub(next)))
-                .div(tooNearBoids.size())).getNormalized();
+        return nearbyBoids.stream().map(Boid::getPos)
+                .filter(e -> actualBoid.getPos().distance(e) < avoidRadius)
+                .map(value -> actualBoid.getPos().sub(value))
+                .collect(Collectors.teeing(
+                        Collectors.averagingDouble(P2d::x),
+                        Collectors.averagingDouble(P2d::y),
+                        V2d::new
+                )).getNormalized();
     }
 
     private V2d calculateAverageVelocity(Collection<Boid> nearbyBoids) {
