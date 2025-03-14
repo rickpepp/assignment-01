@@ -62,4 +62,21 @@ class FlockTest {
                 .buildFlock();
         assertEquals(1, flock.getAvoidRadius());
     }
+
+    @Test
+    void getSeparationWeight() {
+        Flock flock = new FlockBuilder()
+                .separationWeight(2)
+                .buildFlock();
+        assertEquals(2, flock.getSeparationWeight());
+    }
+
+    @Test
+    void setSeparationWeight() {
+        Flock flock = new FlockBuilder()
+                .separationWeight(2)
+                .buildFlock();
+        flock.setSeparationWeight(5);
+        assertEquals(5, flock.getSeparationWeight());
+    }
 }

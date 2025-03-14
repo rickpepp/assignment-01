@@ -10,4 +10,6 @@ public interface Flock {
     public double getMaxSpeed();
     public double getPerceptionRadius();
     public double getAvoidRadius();
+    public double getSeparationWeight();
+    public void setSeparationWeight(double separationWeight);
 }

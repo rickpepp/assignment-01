@@ -11,18 +11,21 @@ public class FlockImpl implements Flock{
     private final double maxSpeed;
     private final double perceptionRadius;
     private final double avoidRadius;
+    private double separationWeight;
 
     public FlockImpl(double width,
                      double height,
                      double maxSpeed,
                      double perceptionRadius,
-                     double avoidRadius) {
+                     double avoidRadius,
+                     double separationWeight) {
         this.boids = new ArrayList<>();
         this.width = width;
         this.height = height;
         this.maxSpeed = maxSpeed;
         this.perceptionRadius = perceptionRadius;
         this.avoidRadius = avoidRadius;
+        this.separationWeight = separationWeight;
     }
 
     @Override
@@ -59,4 +62,16 @@ public class FlockImpl implements Flock{
     public synchronized double getAvoidRadius() {
         return avoidRadius;
     }
+
+    @Override
+    public synchronized double getSeparationWeight() {
+        return separationWeight;
+    }
+
+    @Override
+    public synchronized void setSeparationWeight(double separationWeight) {
+        this.separationWeight = separationWeight;
+    }
+
+
 }
