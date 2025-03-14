@@ -5,9 +5,11 @@ public class FlockBuilder {
     private double width = 800;
     private double height = 800;
     private double maxSpeed = 10;
+    private double perceptionRadius = 2;
+    private double avoidRadius = 1;
 
     public Flock buildFlock() {
-        return new FlockImpl(width, height, maxSpeed);
+        return new FlockImpl(width, height, maxSpeed, perceptionRadius, avoidRadius);
     }
 
     public FlockBuilder width(double width) {
@@ -22,6 +24,16 @@ public class FlockBuilder {
 
     public FlockBuilder maxSpeed(double maxSpeed) {
         this.maxSpeed = maxSpeed;
+        return this;
+    }
+
+    public FlockBuilder perceptionRadius(double perceptionRadius) {
+        this.perceptionRadius = perceptionRadius;
+        return this;
+    }
+
+    public FlockBuilder avoidRadius(double avoidRadius) {
+        this.avoidRadius = avoidRadius;
         return this;
     }
 

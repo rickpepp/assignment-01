@@ -46,4 +46,20 @@ class FlockTest {
                 .buildFlock();
         assertEquals(10, flock.getMaxSpeed());
     }
+
+    @Test
+    void getPerceptionRadius() {
+        Flock flock = new FlockBuilder()
+                .perceptionRadius(5)
+                .buildFlock();
+        assertEquals(5, flock.getPerceptionRadius());
+    }
+
+    @Test
+    void getAvoidRadius() {
+        Flock flock = new FlockBuilder()
+                .avoidRadius(1)
+                .buildFlock();
+        assertEquals(1, flock.getAvoidRadius());
+    }
 }

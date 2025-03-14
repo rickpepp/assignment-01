@@ -11,8 +11,6 @@ public class BoidsModel {
     private double separationWeight; 
     private double alignmentWeight; 
     private double cohesionWeight;
-    private final double perceptionRadius;
-    private final double avoidRadius;
 
     public BoidsModel(int nboids,  
     						double initialSeparationWeight, 
@@ -26,13 +24,13 @@ public class BoidsModel {
         separationWeight = initialSeparationWeight;
         alignmentWeight = initialAlignmentWeight;
         cohesionWeight = initialCohesionWeight;
-        this.perceptionRadius = perceptionRadius;
-        this.avoidRadius = avoidRadius;
 
         this.flock = new FlockBuilder()
                 .width(width)
                 .height(height)
                 .maxSpeed(maxSpeed)
+                .perceptionRadius(perceptionRadius)
+                .avoidRadius(avoidRadius)
                 .buildFlock();
         for (int i = 0; i < nboids; i++) {
         	P2d pos = new P2d(-this.flock.getWidth()/2 + Math.random() * this.flock.getWidth(),
@@ -43,31 +41,31 @@ public class BoidsModel {
 
     }
     
-    public synchronized Collection<Boid> getBoids(){
+    public Collection<Boid> getBoids(){
     	return flock.getBoids();
     }
     
-    public synchronized double getMinX() {
+    public double getMinX() {
     	return -this.flock.getWidth()/2;
     }
 
-    public synchronized double getMaxX() {
+    public double getMaxX() {
     	return this.flock.getWidth()/2;
     }
 
-    public synchronized double getMinY() {
+    public double getMinY() {
     	return -this.flock.getHeight()/2;
     }
 
-    public synchronized double getMaxY() {
+    public double getMaxY() {
     	return this.flock.getHeight()/2;
     }
     
-    public synchronized double getWidth() {
+    public double getWidth() {
     	return this.flock.getWidth();
     }
  
-    public synchronized double getHeight() {
+    public double getHeight() {
     	return this.flock.getHeight();
     }
 
@@ -95,15 +93,15 @@ public class BoidsModel {
     	return alignmentWeight;
     }
     
-    public synchronized double getMaxSpeed() {
+    public double getMaxSpeed() {
     	return this.flock.getMaxSpeed();
     }
 
-    public synchronized double getAvoidRadius() {
-    	return avoidRadius;
+    public double getAvoidRadius() {
+    	return this.flock.getAvoidRadius();
     }
 
-    public synchronized double getPerceptionRadius() {
-    	return perceptionRadius;
+    public double getPerceptionRadius() {
+    	return this.flock.getPerceptionRadius();
     }
 }

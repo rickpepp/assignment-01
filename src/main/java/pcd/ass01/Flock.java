@@ -8,4 +8,6 @@ public interface Flock {
     public double getWidth();
     public double getHeight();
     public double getMaxSpeed();
+    public double getPerceptionRadius();
+    public double getAvoidRadius();
 }
