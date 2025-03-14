@@ -79,4 +79,21 @@ class FlockTest {
         flock.setSeparationWeight(5);
         assertEquals(5, flock.getSeparationWeight());
     }
+
+    @Test
+    void getAlignmentWeight() {
+        Flock flock = new FlockBuilder()
+                .alignmentWeight(3)
+                .buildFlock();
+        assertEquals(3, flock.getAlignmentWeight());
+    }
+
+    @Test
+    void setAlignmentWeight() {
+        Flock flock = new FlockBuilder()
+                .alignmentWeight(3)
+                .buildFlock();
+        flock.setAlignmentWeight(0);
+        assertEquals(0, flock.getAlignmentWeight());
+    }
 }

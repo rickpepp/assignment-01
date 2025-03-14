@@ -8,6 +8,7 @@ public class FlockBuilder {
     private double perceptionRadius = 2;
     private double avoidRadius = 1;
     private double separationWeight = 1;
+    private double alignmentWeight = 1;
 
     public Flock buildFlock() {
         return new FlockImpl(width,
@@ -15,7 +16,8 @@ public class FlockBuilder {
                 maxSpeed,
                 perceptionRadius,
                 avoidRadius,
-                separationWeight);
+                separationWeight,
+                alignmentWeight);
     }
 
     public FlockBuilder width(double width) {
@@ -45,6 +47,11 @@ public class FlockBuilder {
 
     public FlockBuilder separationWeight(double separationWeight) {
         this.separationWeight = separationWeight;
+        return this;
+    }
+
+    public FlockBuilder alignmentWeight(double alignmentWeight) {
+        this.alignmentWeight = alignmentWeight;
         return this;
     }
 
