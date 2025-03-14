@@ -6,10 +6,14 @@ import java.util.List;
 
 public class FlockImpl implements Flock{
 
-    private Collection<Boid> boids;
+    private final Collection<Boid> boids;
+    private final double width;
+    private final double height;
 
-    public FlockImpl() {
+    public FlockImpl(double width, double height) {
         this.boids = new ArrayList<>();
+        this.width = width;
+        this.height = height;
     }
 
     @Override
@@ -20,5 +24,15 @@ public class FlockImpl implements Flock{
     @Override
     public synchronized void addBoid(Boid boid) {
         this.boids.add(boid);
+    }
+
+    @Override
+    public synchronized double getWidth() {
+        return width;
+    }
+
+    @Override
+    public synchronized double getHeight() {
+        return height;
     }
 }

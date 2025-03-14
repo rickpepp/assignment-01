@@ -10,9 +10,7 @@ public class BoidsModel {
     private final Flock flock;
     private double separationWeight; 
     private double alignmentWeight; 
-    private double cohesionWeight; 
-    private final double width;
-    private final double height;
+    private double cohesionWeight;
     private final double maxSpeed;
     private final double perceptionRadius;
     private final double avoidRadius;
@@ -29,15 +27,17 @@ public class BoidsModel {
         separationWeight = initialSeparationWeight;
         alignmentWeight = initialAlignmentWeight;
         cohesionWeight = initialCohesionWeight;
-        this.width = width;
-        this.height = height;
         this.maxSpeed = maxSpeed;
         this.perceptionRadius = perceptionRadius;
         this.avoidRadius = avoidRadius;
 
-        this.flock = new FlockBuilder().buildFlock();
+        this.flock = new FlockBuilder()
+                .width(width)
+                .height(height)
+                .buildFlock();
         for (int i = 0; i < nboids; i++) {
-        	P2d pos = new P2d(-width/2 + Math.random() * width, -height/2 + Math.random() * height);
+        	P2d pos = new P2d(-this.flock.getWidth()/2 + Math.random() * this.flock.getWidth(),
+                    -height/2 + Math.random() * height);
         	V2d vel = new V2d(Math.random() * maxSpeed/2 - maxSpeed/4, Math.random() * maxSpeed/2 - maxSpeed/4);
             flock.addBoid(new Boid(pos, vel));
         }
@@ -49,27 +49,27 @@ public class BoidsModel {
     }
     
     public synchronized double getMinX() {
-    	return -width/2;
+    	return -this.flock.getWidth()/2;
     }
 
     public synchronized double getMaxX() {
-    	return width/2;
+    	return this.flock.getWidth()/2;
     }
 
     public synchronized double getMinY() {
-    	return -height/2;
+    	return -this.flock.getHeight()/2;
     }
 
     public synchronized double getMaxY() {
-    	return height/2;
+    	return this.flock.getHeight()/2;
     }
     
     public synchronized double getWidth() {
-    	return width;
+    	return this.flock.getWidth();
     }
  
     public synchronized double getHeight() {
-    	return height;
+    	return this.flock.getHeight();
     }
 
     public synchronized void setSeparationWeight(double value) {

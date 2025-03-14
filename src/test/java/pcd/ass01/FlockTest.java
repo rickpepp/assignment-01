@@ -22,4 +22,20 @@ class FlockTest {
                 flock.getBoids().containsAll(resultExpected) &&
                 resultExpected.containsAll(flock.getBoids()));
     }
+
+    @Test
+    void getWidthTest() {
+        Flock flock = new FlockBuilder()
+                .width(800)
+                .buildFlock();
+        assertEquals(800, flock.getWidth());
+    }
+
+    @Test
+    void getHeightTest() {
+        Flock flock = new FlockBuilder()
+                .height(800)
+                .buildFlock();
+        assertEquals(800, flock.getHeight());
+    }
 }
