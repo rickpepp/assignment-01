@@ -1,6 +1,7 @@
 package pcd.ass01;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class Boid {
@@ -35,7 +36,7 @@ public class Boid {
 
     	/* change velocity vector according to separation, alignment, cohesion */
     	
-    	List<Boid> nearbyBoids = getNearbyBoids(flock);
+    	Collection<Boid> nearbyBoids = flock.getNearbyBoids(this);
     	
     	V2d separation = this.functions.calculateSeparation(this, nearbyBoids, flock.getAvoidRadius());
         V2d alignment = this.functions.calculateAlignment(this, nearbyBoids);
@@ -63,19 +64,5 @@ public class Boid {
         if (pos.x() >= flock.getWidth()/2) pos = pos.sum(new V2d(-flock.getWidth(), 0));
         if (pos.y() < -flock.getHeight()/2) pos = pos.sum(new V2d(0, flock.getHeight()));
         if (pos.y() >= flock.getHeight()/2) pos = pos.sum(new V2d(0, -flock.getHeight()));
-    }
-    
-    private List<Boid> getNearbyBoids(Flock flock) {
-    	var list = new ArrayList<Boid>();
-        for (Boid other : flock.getBoids()) {
-        	if (other != this) {
-        		P2d otherPos = other.getPos();
-        		double distance = pos.distance(otherPos);
-        		if (distance < flock.getPerceptionRadius()) {
-        			list.add(other);
-        		}
-        	}
-        }
-        return list;
     }
 }

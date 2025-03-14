@@ -2,6 +2,7 @@ package pcd.ass01;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class FlockImpl implements Flock{
 
@@ -99,5 +100,12 @@ public class FlockImpl implements Flock{
         this.cohesionWeight = cohesionWeight;
     }
 
+    @Override
+    public Collection<Boid> getNearbyBoids(Boid boid) {
+        return getBoids().stream()
+                .filter(singleBoid ->
+                        singleBoid.getPos().distance(boid.getPos()) < getPerceptionRadius() && singleBoid != boid)
+                .toList();
+    }
 
 }

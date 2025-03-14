@@ -113,4 +113,25 @@ class FlockTest {
         flock.setCohesionWeight(19);
         assertEquals(19, flock.getCohesionWeight());
     }
+
+    @Test
+    void getNearbyBoids() {
+        Flock flock = new FlockBuilder()
+                .perceptionRadius(5)
+                .buildFlock();
+        Boid boid1 = new Boid(new P2d(1, 1), new V2d(0, 0));
+        Boid boid2 = new Boid(new P2d(0, 0), new V2d(0, 0));
+        Boid boid3 = new Boid(new P2d(9, -10), new V2d(0, 0));
+        Boid boid4 = new Boid(new P2d(-1, 2), new V2d(0, 0));
+        flock.addBoid(boid1);
+        flock.addBoid(boid2);
+        flock.addBoid(boid3);
+        flock.addBoid(boid4);
+        Collection<Boid> resultExpected = new ArrayList<>();
+        resultExpected.add(boid1);
+        resultExpected.add(boid4);
+        assertTrue(flock.getNearbyBoids(boid2).size() == resultExpected.size() &&
+                flock.getNearbyBoids(boid2).containsAll(resultExpected) &&
+                resultExpected.containsAll(flock.getNearbyBoids(boid2)));
+    }
 }
