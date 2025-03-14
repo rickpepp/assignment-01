@@ -7,4 +7,5 @@ public interface Flock {
     public void addBoid(Boid boid);
     public double getWidth();
     public double getHeight();
+    public double getMaxSpeed();
 }

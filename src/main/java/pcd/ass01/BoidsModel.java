@@ -11,7 +11,6 @@ public class BoidsModel {
     private double separationWeight; 
     private double alignmentWeight; 
     private double cohesionWeight;
-    private final double maxSpeed;
     private final double perceptionRadius;
     private final double avoidRadius;
 
@@ -27,13 +26,13 @@ public class BoidsModel {
         separationWeight = initialSeparationWeight;
         alignmentWeight = initialAlignmentWeight;
         cohesionWeight = initialCohesionWeight;
-        this.maxSpeed = maxSpeed;
         this.perceptionRadius = perceptionRadius;
         this.avoidRadius = avoidRadius;
 
         this.flock = new FlockBuilder()
                 .width(width)
                 .height(height)
+                .maxSpeed(maxSpeed)
                 .buildFlock();
         for (int i = 0; i < nboids; i++) {
         	P2d pos = new P2d(-this.flock.getWidth()/2 + Math.random() * this.flock.getWidth(),
@@ -97,7 +96,7 @@ public class BoidsModel {
     }
     
     public synchronized double getMaxSpeed() {
-    	return maxSpeed;
+    	return this.flock.getMaxSpeed();
     }
 
     public synchronized double getAvoidRadius() {

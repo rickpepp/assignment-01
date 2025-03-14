@@ -38,4 +38,12 @@ class FlockTest {
                 .buildFlock();
         assertEquals(800, flock.getHeight());
     }
+
+    @Test
+    void getMaxSpeed() {
+        Flock flock = new FlockBuilder()
+                .maxSpeed(10)
+                .buildFlock();
+        assertEquals(10, flock.getMaxSpeed());
+    }
 }
