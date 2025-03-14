@@ -31,26 +31,26 @@ public class Boid {
         this.vel = velocity;
     }
     
-    public void update(BoidsModel model) {
+    public void update(Flock flock) {
 
     	/* change velocity vector according to separation, alignment, cohesion */
     	
-    	List<Boid> nearbyBoids = getNearbyBoids(model);
+    	List<Boid> nearbyBoids = getNearbyBoids(flock);
     	
-    	V2d separation = this.functions.calculateSeparation(this, nearbyBoids, model.getAvoidRadius());
+    	V2d separation = this.functions.calculateSeparation(this, nearbyBoids, flock.getAvoidRadius());
         V2d alignment = this.functions.calculateAlignment(this, nearbyBoids);
     	V2d cohesion = this.functions.calculateCohesion(this, nearbyBoids);
     	
-    	vel = vel.sum(alignment.mul(model.getAlignmentWeight()))
-    			.sum(separation.mul(model.getSeparationWeight()))
-    			.sum(cohesion.mul(model.getCohesionWeight()));
+    	vel = vel.sum(alignment.mul(flock.getAlignmentWeight()))
+    			.sum(separation.mul(flock.getSeparationWeight()))
+    			.sum(cohesion.mul(flock.getCohesionWeight()));
         
         /* Limit speed to MAX_SPEED */
 
         double speed = vel.abs();
         
-        if (speed > model.getMaxSpeed()) {
-            vel = vel.getNormalized().mul(model.getMaxSpeed());
+        if (speed > flock.getMaxSpeed()) {
+            vel = vel.getNormalized().mul(flock.getMaxSpeed());
         }
 
         /* Update position */
@@ -59,19 +59,19 @@ public class Boid {
         
         /* environment wrap-around */
         
-        if (pos.x() < model.getMinX()) pos = pos.sum(new V2d(model.getWidth(), 0));
-        if (pos.x() >= model.getMaxX()) pos = pos.sum(new V2d(-model.getWidth(), 0));
-        if (pos.y() < model.getMinY()) pos = pos.sum(new V2d(0, model.getHeight()));
-        if (pos.y() >= model.getMaxY()) pos = pos.sum(new V2d(0, -model.getHeight()));
+        if (pos.x() < -flock.getWidth()/2) pos = pos.sum(new V2d(flock.getWidth(), 0));
+        if (pos.x() >= flock.getWidth()/2) pos = pos.sum(new V2d(-flock.getWidth(), 0));
+        if (pos.y() < -flock.getHeight()/2) pos = pos.sum(new V2d(0, flock.getHeight()));
+        if (pos.y() >= flock.getHeight()/2) pos = pos.sum(new V2d(0, -flock.getHeight()));
     }
     
-    private List<Boid> getNearbyBoids(BoidsModel model) {
+    private List<Boid> getNearbyBoids(Flock flock) {
     	var list = new ArrayList<Boid>();
-        for (Boid other : model.getBoids()) {
+        for (Boid other : flock.getBoids()) {
         	if (other != this) {
         		P2d otherPos = other.getPos();
         		double distance = pos.distance(otherPos);
-        		if (distance < model.getPerceptionRadius()) {
+        		if (distance < flock.getPerceptionRadius()) {
         			list.add(other);
         		}
         	}

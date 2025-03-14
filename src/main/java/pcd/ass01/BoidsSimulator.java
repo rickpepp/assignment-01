@@ -24,7 +24,7 @@ public class BoidsSimulator {
             var t0 = System.currentTimeMillis();
     		var boids = model.getBoids();
     		for (Boid boid : boids) {
-                boid.update(model);
+                boid.update(model.getFlock());
             }
             
     		if (view.isPresent()) {

@@ -37,33 +37,15 @@ public class BoidsModel {
         }
 
     }
+
+    public Flock getFlock() {return this.flock; }
     
     public Collection<Boid> getBoids(){
     	return flock.getBoids();
     }
     
-    public double getMinX() {
-    	return -this.flock.getWidth()/2;
-    }
-
-    public double getMaxX() {
-    	return this.flock.getWidth()/2;
-    }
-
-    public double getMinY() {
-    	return -this.flock.getHeight()/2;
-    }
-
-    public double getMaxY() {
-    	return this.flock.getHeight()/2;
-    }
-    
     public double getWidth() {
     	return this.flock.getWidth();
-    }
- 
-    public double getHeight() {
-    	return this.flock.getHeight();
     }
 
     public void setSeparationWeight(double value) {
@@ -76,29 +58,5 @@ public class BoidsModel {
 
     public void setCohesionWeight(double value) {
     	this.flock.setCohesionWeight(value);
-    }
-
-    public double getSeparationWeight() {
-    	return this.flock.getSeparationWeight();
-    }
-
-    public double getCohesionWeight() {
-    	return this.flock.getCohesionWeight();
-    }
-
-    public double getAlignmentWeight() {
-    	return this.flock.getAlignmentWeight();
-    }
-    
-    public double getMaxSpeed() {
-    	return this.flock.getMaxSpeed();
-    }
-
-    public double getAvoidRadius() {
-    	return this.flock.getAvoidRadius();
-    }
-
-    public double getPerceptionRadius() {
-    	return this.flock.getPerceptionRadius();
     }
 }
