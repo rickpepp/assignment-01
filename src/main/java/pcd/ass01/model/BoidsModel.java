@@ -5,6 +5,7 @@ import java.util.Collection;
 public class BoidsModel {
     
     private final Flock flock;
+    private final UpdateFlock updateFlock;
 
     public BoidsModel(int nBoids,
     						double initialSeparationWeight, 
@@ -27,6 +28,7 @@ public class BoidsModel {
                 .cohesionWeight(initialCohesionWeight)
                 .buildFlock();
         createRandomBoids(nBoids);
+        this.updateFlock = new SequentialUpdateFlock(flock);
     }
 
     private void createRandomBoids(int nBoids) {
@@ -59,8 +61,6 @@ public class BoidsModel {
     }
 
     public void update() {
-        for (Boid boid : this.flock.getBoids()) {
-            boid.update(this.flock);
-        }
+        this.updateFlock.update();
     }
 }
