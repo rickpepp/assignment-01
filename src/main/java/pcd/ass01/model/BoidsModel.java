@@ -6,7 +6,7 @@ public class BoidsModel {
     
     private final Flock flock;
 
-    public BoidsModel(int nboids,  
+    public BoidsModel(int nBoids,
     						double initialSeparationWeight, 
     						double initialAlignmentWeight, 
     						double initialCohesionWeight,
@@ -26,16 +26,17 @@ public class BoidsModel {
                 .alignmentWeight(initialAlignmentWeight)
                 .cohesionWeight(initialCohesionWeight)
                 .buildFlock();
-        for (int i = 0; i < nboids; i++) {
-        	P2d pos = new P2d(-this.flock.getWidth()/2 + Math.random() * this.flock.getWidth(),
-                    -height/2 + Math.random() * height);
-        	V2d vel = new V2d(Math.random() * maxSpeed/2 - maxSpeed/4, Math.random() * maxSpeed/2 - maxSpeed/4);
-            flock.addBoid(new Boid(pos, vel));
-        }
-
+        createRandomBoids(nBoids);
     }
 
-    public Flock getFlock() {return this.flock; }
+    private void createRandomBoids(int nBoids) {
+        for (int i = 0; i < nBoids; i++) {
+        	P2d pos = new P2d(-this.flock.getWidth()/2 + Math.random() * this.flock.getWidth(),
+                    -this.flock.getHeight() /2 + Math.random() * this.flock.getHeight());
+        	V2d vel = new V2d(Math.random() * this.flock.getMaxSpeed() /2 - this.flock.getMaxSpeed() /4, Math.random() * this.flock.getMaxSpeed() /2 - this.flock.getMaxSpeed() /4);
+            flock.addBoid(new Boid(pos, vel));
+        }
+    }
     
     public Collection<Boid> getBoids(){
     	return flock.getBoids();
@@ -55,5 +56,11 @@ public class BoidsModel {
 
     public void setCohesionWeight(double value) {
     	this.flock.setCohesionWeight(value);
+    }
+
+    public void update() {
+        for (Boid boid : this.flock.getBoids()) {
+            boid.update(this.flock);
+        }
     }
 }

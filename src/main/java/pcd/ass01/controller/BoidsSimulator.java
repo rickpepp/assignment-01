@@ -26,11 +26,7 @@ public class BoidsSimulator {
     public void runSimulation() {
     	while (true) {
             var t0 = System.currentTimeMillis();
-    		var boids = model.getBoids();
-    		for (Boid boid : boids) {
-                boid.update(model.getFlock());
-            }
-            
+            model.update();
     		if (view.isPresent()) {
             	view.get().update(framerate);
             	var t1 = System.currentTimeMillis();
