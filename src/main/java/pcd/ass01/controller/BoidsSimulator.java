@@ -1,4 +1,8 @@
-package pcd.ass01;
+package pcd.ass01.controller;
+
+import pcd.ass01.model.Boid;
+import pcd.ass01.model.BoidsModel;
+import pcd.ass01.view.BoidsView;
 
 import java.util.Optional;
 

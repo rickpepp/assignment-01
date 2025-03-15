@@ -1,7 +1,6 @@
-package pcd.ass01;
+package pcd.ass01.model;
 
 import java.util.Collection;
-import java.util.List;
 
 public interface Flock {
     public Collection<Boid> getBoids();

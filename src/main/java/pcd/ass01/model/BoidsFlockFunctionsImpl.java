@@ -1,9 +1,9 @@
-package pcd.ass01;
+package pcd.ass01.model;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-public class BoidsFlockFunctionsImpl implements BoidsFlockFunctions{
+public class BoidsFlockFunctionsImpl implements BoidsFlockFunctions {
 
     @Override
     public V2d calculateAlignment(Boid actualBoid, Collection<Boid> nearbyBoids) {

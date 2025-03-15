@@ -2,6 +2,9 @@ package pcd.ass01;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import pcd.ass01.model.Boid;
+import pcd.ass01.model.P2d;
+import pcd.ass01.model.V2d;
 
 import static org.junit.jupiter.api.Assertions.*;
 

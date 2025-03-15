@@ -1,10 +1,9 @@
-package pcd.ass01;
+package pcd.ass01.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
-public class FlockImpl implements Flock{
+public class FlockImpl implements Flock {
 
     private final Collection<Boid> boids;
     private final double width;
