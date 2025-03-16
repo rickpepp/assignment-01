@@ -35,6 +35,18 @@ public class BoidsFlockFunctionsImpl implements BoidsFlockFunctions {
                 )).getNormalized();
     }
 
+    @Override
+    public V2d weightAlignmentCohesionSeparationToSum(V2d alignment,
+                                                      V2d cohesion,
+                                                      V2d separation,
+                                                      double alignmentWeight,
+                                                      double cohesionWeight,
+                                                      double separationWeight) {
+        return alignment.mul(alignmentWeight)
+                .sum(cohesion.mul(cohesionWeight))
+                .sum(separation.mul(separationWeight));
+    }
+
     private V2d calculateAverageVelocity(Collection<Boid> nearbyBoids) {
         return nearbyBoids.stream()
                 .map(Boid::getVel)

@@ -21,7 +21,8 @@ public class SequentialUpdateFlock implements UpdateFlock {
     }
 
     private void updateSingleBoid(Boid boid) {
-        updateVelocityWithCohesionAlignmentSeparation(boid);
+        Collection<Boid> nearbyBoids = flock.getNearbyBoids(boid);
+        boid.setVel(boid.getVel().sum(getAlignmentCohesionSeparationToSum(boid, nearbyBoids)));
         limitSpeedToMaxSpeed(boid);
         boid.setPos(boid.getPos().sum(boid.getVel()));
         environmentWrapAround(boid,
@@ -39,22 +40,14 @@ public class SequentialUpdateFlock implements UpdateFlock {
         }
     }
 
-    private void updateVelocityWithCohesionAlignmentSeparation(Boid boid) {
-        Collection<Boid> nearbyBoids = flock.getNearbyBoids(boid);
-        boid.setVel(
-                getNewVelocityWithWeightedCohesionAlignmentSeparation(boid,
-                    this.functions.calculateSeparation(boid, nearbyBoids, flock.getAvoidRadius()),
-                    this.functions.calculateAlignment(boid, nearbyBoids),
-                    this.functions.calculateCohesion(boid, nearbyBoids)));
-    }
-
-    private V2d getNewVelocityWithWeightedCohesionAlignmentSeparation(Boid boid,
-                                                                      V2d separation,
-                                                                      V2d alignment,
-                                                                      V2d cohesion) {
-        return boid.getVel().sum(alignment.mul(flock.getAlignmentWeight()))
-                .sum(separation.mul(flock.getSeparationWeight()))
-                .sum(cohesion.mul(flock.getCohesionWeight()));
+    private V2d getAlignmentCohesionSeparationToSum(Boid boid, Collection<Boid> nearbyBoids) {
+        return functions.weightAlignmentCohesionSeparationToSum(
+                this.functions.calculateAlignment(boid, nearbyBoids),
+                this.functions.calculateCohesion(boid, nearbyBoids),
+                this.functions.calculateSeparation(boid, nearbyBoids, flock.getAvoidRadius()),
+                flock.getAlignmentWeight(),
+                flock.getCohesionWeight(),
+                flock.getSeparationWeight());
     }
 
     private void environmentWrapAround(Boid boid,

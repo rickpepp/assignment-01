@@ -90,4 +90,22 @@ class BoidsFlockFunctionsImplTest {
         Collection<Boid> nearbyBoids = new ArrayList<>(0);
         assertEquals(new V2d(0, 0), functions.calculateSeparation(boid, nearbyBoids, AVOID_RADIUS));
     }
+
+    @Test
+    void weightAlignmentCohesionSeparationToSum() {
+        V2d alignment = new V2d(27.1, -0.1);
+        V2d cohesion = new V2d(1, 7.6);
+        V2d separation = new V2d(0, -9.1);
+        double alignmentWeight = 1.0;
+        double cohesionWeight = 0.1;
+        double separationWeight = 2;
+        V2d resultExpected = new V2d(alignmentWeight * alignment.x() + cohesionWeight * cohesion.x() + separationWeight * separation.x(),
+                alignmentWeight * alignment.y() + cohesionWeight * cohesion.y() + separationWeight * separation.y());
+        assertEquals(resultExpected, functions.weightAlignmentCohesionSeparationToSum(alignment,
+                cohesion,
+                separation,
+                alignmentWeight,
+                cohesionWeight,
+                separationWeight));
+    }
 }
