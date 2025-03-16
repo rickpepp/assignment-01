@@ -12,4 +12,5 @@ public interface BoidsFlockFunctions {
                                                       double alignmentWeight,
                                                       double cohesionWeight,
                                                       double separationWeight);
+    public V2d getLimitedSpeed(V2d actualSpeed, double maxSpeed);
 }

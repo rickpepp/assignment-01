@@ -22,22 +22,14 @@ public class SequentialUpdateFlock implements UpdateFlock {
 
     private void updateSingleBoid(Boid boid) {
         Collection<Boid> nearbyBoids = flock.getNearbyBoids(boid);
-        boid.setVel(boid.getVel().sum(getAlignmentCohesionSeparationToSum(boid, nearbyBoids)));
-        limitSpeedToMaxSpeed(boid);
+        boid.setVel(functions.getLimitedSpeed(boid.getVel().sum(getAlignmentCohesionSeparationToSum(boid, nearbyBoids)),
+                flock.getMaxSpeed()));
         boid.setPos(boid.getPos().sum(boid.getVel()));
         environmentWrapAround(boid,
                 -flock.getWidth()/2,
                 flock.getWidth()/2,
                 -flock.getHeight()/2,
                 flock.getHeight()/2);
-    }
-
-    private void limitSpeedToMaxSpeed(Boid boid) {
-        if (boid.getVel().abs() > flock.getMaxSpeed()) {
-            boid.setVel(boid.getVel()
-                    .getNormalized()
-                    .mul(flock.getMaxSpeed()));
-        }
     }
 
     private V2d getAlignmentCohesionSeparationToSum(Boid boid, Collection<Boid> nearbyBoids) {

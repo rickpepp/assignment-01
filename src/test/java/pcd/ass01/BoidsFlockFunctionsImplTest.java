@@ -108,4 +108,18 @@ class BoidsFlockFunctionsImplTest {
                 cohesionWeight,
                 separationWeight));
     }
+
+    @Test
+    void limitMaxSpeed() {
+        V2d speed = new V2d(150, -70);
+        double maxSpeed = 50;
+        assertEquals(speed.getNormalized().mul(maxSpeed), functions.getLimitedSpeed(speed, maxSpeed));
+    }
+
+    @Test
+    void limitMaxSpeedNothingToDo() {
+        V2d speed = new V2d(150, -70);
+        double maxSpeed = 550;
+        assertEquals(speed, functions.getLimitedSpeed(speed, maxSpeed));
+    }
 }

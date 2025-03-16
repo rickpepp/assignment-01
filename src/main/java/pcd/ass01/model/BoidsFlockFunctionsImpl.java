@@ -47,6 +47,11 @@ public class BoidsFlockFunctionsImpl implements BoidsFlockFunctions {
                 .sum(separation.mul(separationWeight));
     }
 
+    @Override
+    public V2d getLimitedSpeed(V2d actualSpeed, double maxSpeed) {
+        return (actualSpeed.abs() > maxSpeed) ? actualSpeed.getNormalized().mul(maxSpeed) : actualSpeed;
+    }
+
     private V2d calculateAverageVelocity(Collection<Boid> nearbyBoids) {
         return nearbyBoids.stream()
                 .map(Boid::getVel)
