@@ -7,6 +7,7 @@ public class SequentialUpdateFlock implements UpdateFlock {
     private Flock flock;
     private BoidsFlockFunctions functions;
 
+
     public SequentialUpdateFlock(Flock flock) {
         this.flock = flock;
         this.functions = new BoidsFlockFunctionsImpl();
@@ -20,36 +21,50 @@ public class SequentialUpdateFlock implements UpdateFlock {
     }
 
     private void updateSingleBoid(Boid boid) {
-        /* change velocity vector according to separation, alignment, cohesion */
+        updateVelocityWithCohesionAlignmentSeparation(boid);
+        limitSpeedToMaxSpeed(boid);
+        boid.setPos(boid.getPos().sum(boid.getVel()));
+        environmentWrapAround(boid,
+                -flock.getWidth()/2,
+                flock.getWidth()/2,
+                -flock.getHeight()/2,
+                flock.getHeight()/2);
+    }
 
-        Collection<Boid> nearbyBoids = flock.getNearbyBoids(boid);
-
-        V2d separation = this.functions.calculateSeparation(boid, nearbyBoids, flock.getAvoidRadius());
-        V2d alignment = this.functions.calculateAlignment(boid, nearbyBoids);
-        V2d cohesion = this.functions.calculateCohesion(boid, nearbyBoids);
-
-        boid.setVel(boid.getVel().sum(alignment.mul(flock.getAlignmentWeight()))
-                .sum(separation.mul(flock.getSeparationWeight()))
-                .sum(cohesion.mul(flock.getCohesionWeight())));
-
-        /* Limit speed to MAX_SPEED */
-
-        double speed = boid.getVel().abs();
-
-        if (speed > flock.getMaxSpeed()) {
+    private void limitSpeedToMaxSpeed(Boid boid) {
+        if (boid.getVel().abs() > flock.getMaxSpeed()) {
             boid.setVel(boid.getVel()
                     .getNormalized()
                     .mul(flock.getMaxSpeed()));
         }
+    }
 
-        /* Update position */
-        boid.setPos(boid.getPos().sum(boid.getVel()));
+    private void updateVelocityWithCohesionAlignmentSeparation(Boid boid) {
+        Collection<Boid> nearbyBoids = flock.getNearbyBoids(boid);
+        boid.setVel(
+                getNewVelocityWithWeightedCohesionAlignmentSeparation(boid,
+                    this.functions.calculateSeparation(boid, nearbyBoids, flock.getAvoidRadius()),
+                    this.functions.calculateAlignment(boid, nearbyBoids),
+                    this.functions.calculateCohesion(boid, nearbyBoids)));
+    }
 
-        /* environment wrap-around */
+    private V2d getNewVelocityWithWeightedCohesionAlignmentSeparation(Boid boid,
+                                                                      V2d separation,
+                                                                      V2d alignment,
+                                                                      V2d cohesion) {
+        return boid.getVel().sum(alignment.mul(flock.getAlignmentWeight()))
+                .sum(separation.mul(flock.getSeparationWeight()))
+                .sum(cohesion.mul(flock.getCohesionWeight()));
+    }
 
-        if (boid.getPos().x() < -flock.getWidth()/2) boid.setPos(boid.getPos().sum(new V2d(flock.getWidth(), 0)));
-        if (boid.getPos().x() >= flock.getWidth()/2) boid.setPos(boid.getPos().sum(new V2d(-flock.getWidth(), 0)));
-        if (boid.getPos().y() < -flock.getHeight()/2) boid.setPos(boid.getPos().sum(new V2d(0, flock.getHeight())));
-        if (boid.getPos().y() >= flock.getHeight()/2) boid.setPos(boid.getPos().sum(new V2d(0, -flock.getHeight())));
+    private void environmentWrapAround(Boid boid,
+                                       double minX,
+                                       double maxX,
+                                       double minY,
+                                       double maxY) {
+        if (boid.getPos().x() < minX) boid.setPos(boid.getPos().sum(new V2d(maxX * 2, 0)));
+        if (boid.getPos().x() >= maxX) boid.setPos(boid.getPos().sum(new V2d(minX * 2, 0)));
+        if (boid.getPos().y() < minY) boid.setPos(boid.getPos().sum(new V2d(0, maxY * 2)));
+        if (boid.getPos().y() >= maxY) boid.setPos(boid.getPos().sum(new V2d(0, minY * 2)));
     }
 }
