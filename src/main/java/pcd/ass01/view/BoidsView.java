@@ -1,6 +1,6 @@
 package pcd.ass01.view;
 
-import pcd.ass01.controller.BoidsPanel;
+import pcd.ass01.controller.BoidsSimulator;
 import pcd.ass01.model.BoidsModel;
 
 import javax.swing.*;
@@ -15,11 +15,11 @@ public class BoidsView implements ChangeListener {
 	private JFrame frame;
 	private BoidsPanel boidsPanel;
 	private JSlider cohesionSlider, separationSlider, alignmentSlider;
-	private BoidsModel model;
+	private BoidsSimulator simulator;
 	private int width, height;
 	
-	public BoidsView(BoidsModel model, int width, int height) {
-		this.model = model;
+	public BoidsView(BoidsSimulator simulator, int width, int height) {
+		this.simulator = simulator;
 		this.width = width;
 		this.height = height;
 		
@@ -31,7 +31,7 @@ public class BoidsView implements ChangeListener {
 		LayoutManager layout = new BorderLayout();
 		cp.setLayout(layout);
 
-        boidsPanel = new BoidsPanel(this, model);
+        boidsPanel = new BoidsPanel(this, simulator);
 		cp.add(BorderLayout.CENTER, boidsPanel);
 
         JPanel slidersPanel = new JPanel();
@@ -79,13 +79,13 @@ public class BoidsView implements ChangeListener {
 	public void stateChanged(ChangeEvent e) {
 		if (e.getSource() == separationSlider) {
 			var val = separationSlider.getValue();
-			model.setSeparationWeight(0.1*val);
+			simulator.setSeparationWeight(0.1*val);
 		} else if (e.getSource() == cohesionSlider) {
 			var val = cohesionSlider.getValue();
-			model.setCohesionWeight(0.1*val);
+			simulator.setCohesionWeight(0.1*val);
 		} else {
 			var val = alignmentSlider.getValue();
-			model.setAlignmentWeight(0.1*val);
+			simulator.setAlignmentWeight(0.1*val);
 		}
 	}
 	

@@ -2,8 +2,10 @@ package pcd.ass01.controller;
 
 import pcd.ass01.model.Boid;
 import pcd.ass01.model.BoidsModel;
+import pcd.ass01.model.P2d;
 import pcd.ass01.view.BoidsView;
 
+import java.util.Collection;
 import java.util.Optional;
 
 public class BoidsSimulator {
@@ -42,7 +44,22 @@ public class BoidsSimulator {
                 	framerate = (int) (1000/dtElapsed);
                 }
     		}
-            
     	}
+    }
+
+    public Collection<P2d> getBoidsPosition() {
+        return this.model.getBoids().stream().map(Boid::getPos).toList();
+    }
+
+    public void setSeparationWeight(double separationWeight) {
+        this.model.setSeparationWeight(separationWeight);
+    }
+
+    public void setCohesionWeight(double cohesionWeight) {
+        this.model.setCohesionWeight(cohesionWeight);
+    }
+
+    public void setAlignmentWeight(double alignmentWeight) {
+        this.model.setAlignmentWeight(alignmentWeight);
     }
 }

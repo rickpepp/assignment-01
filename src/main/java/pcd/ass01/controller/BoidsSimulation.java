@@ -3,6 +3,8 @@ package pcd.ass01.controller;
 import pcd.ass01.model.BoidsModel;
 import pcd.ass01.view.BoidsView;
 
+import java.awt.*;
+
 public class BoidsSimulation {
 
 	final static int N_BOIDS = 1500;
@@ -21,16 +23,20 @@ public class BoidsSimulation {
 	final static int SCREEN_HEIGHT = 800; 
 	
 
-    public static void main(String[] args) {      
+    public static void main(String[] args) {
+		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		int width = gd.getDisplayMode().getWidth();
+		int height = gd.getDisplayMode().getHeight();
     	var model = new BoidsModel(
     					N_BOIDS, 
-    					SEPARATION_WEIGHT, ALIGNMENT_WEIGHT, COHESION_WEIGHT, 
-    					ENVIRONMENT_WIDTH, ENVIRONMENT_HEIGHT,
+    					SEPARATION_WEIGHT, ALIGNMENT_WEIGHT, COHESION_WEIGHT,
+						width,
+						height,
     					MAX_SPEED,
     					PERCEPTION_RADIUS,
     					AVOID_RADIUS); 
     	var sim = new BoidsSimulator(model);
-    	var view = new BoidsView(model, SCREEN_WIDTH, SCREEN_HEIGHT);
+    	var view = new BoidsView(sim, width, height);
     	sim.attachView(view);
     	sim.runSimulation();
     }

@@ -1,8 +1,9 @@
-package pcd.ass01.controller;
+package pcd.ass01.view;
 
+import pcd.ass01.controller.BoidsSimulator;
 import pcd.ass01.model.Boid;
 import pcd.ass01.model.BoidsModel;
-import pcd.ass01.view.BoidsView;
+import pcd.ass01.model.P2d;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,11 +11,11 @@ import java.awt.*;
 public class BoidsPanel extends JPanel {
 
 	private BoidsView view;
-	private BoidsModel model;
+	private BoidsSimulator simulator;
     private int framerate;
 
-    public BoidsPanel(BoidsView view, BoidsModel model) {
-    	this.model = model;
+    public BoidsPanel(BoidsView view, BoidsSimulator simulator) {
+    	this.simulator = simulator;
     	this.view = view;
     }
 
@@ -29,17 +30,17 @@ public class BoidsPanel extends JPanel {
         
         var w = view.getWidth();
         var h = view.getHeight();
-        var envWidth = model.getWidth();
+        var envWidth = view.getWidth();
         var xScale = w/envWidth;
         // var envHeight = model.getHeight();
         // var yScale = h/envHeight;
 
-        var boids = model.getBoids();
+        var boids = simulator.getBoidsPosition();
 
         g.setColor(Color.BLUE);
-        for (Boid boid : boids) {
-        	var x = boid.getPos().x();
-        	var y = boid.getPos().y();
+        for (P2d boid : boids) {
+        	var x = boid.x();
+        	var y = boid.y();
         	int px = (int)(w/2 + x*xScale);
         	int py = (int)(h/2 - y*xScale);
             g.fillOval(px,py, 5, 5);
