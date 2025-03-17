@@ -16,5 +16,4 @@ public interface Flock {
     public void setSeparationWeight(double separationWeight);
     public void setAlignmentWeight(double alignmentWeight);
     public void setCohesionWeight(double cohesionWeight);
-    public Collection<Boid> getNearbyBoids(Boid boid);
 }

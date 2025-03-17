@@ -99,12 +99,4 @@ public class FlockImpl implements Flock {
         this.cohesionWeight = cohesionWeight;
     }
 
-    @Override
-    public Collection<Boid> getNearbyBoids(Boid boid) {
-        return getBoids().stream()
-                .filter(singleBoid ->
-                        singleBoid.getPos().distance(boid.getPos()) < getPerceptionRadius() && singleBoid != boid)
-                .toList();
-    }
-
 }

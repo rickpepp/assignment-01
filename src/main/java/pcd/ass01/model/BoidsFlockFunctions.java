@@ -18,4 +18,5 @@ public interface BoidsFlockFunctions {
                                      double maxX,
                                      double minY,
                                      double maxY);
+    public Collection<Boid> getNearbyBoids(Boid boid, Collection<Boid> allBoids, double perceptionRadius);
 }

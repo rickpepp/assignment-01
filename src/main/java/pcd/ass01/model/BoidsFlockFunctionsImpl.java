@@ -1,6 +1,7 @@
 package pcd.ass01.model;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class BoidsFlockFunctionsImpl implements BoidsFlockFunctions {
@@ -59,6 +60,14 @@ public class BoidsFlockFunctionsImpl implements BoidsFlockFunctions {
         if (position.y() < minY) position = position.sum(new V2d(0, maxY * 2));
         if (position.y() >= maxY) position = position.sum(new V2d(0, minY * 2));
         return position;
+    }
+
+    @Override
+    public Collection<Boid> getNearbyBoids(Boid boid, Collection<Boid> allBoids, double perceptionRadius) {
+        return allBoids.stream()
+                .filter(singleBoid ->
+                        singleBoid.getPos().distance(boid.getPos()) < perceptionRadius && singleBoid != boid)
+                .toList();
     }
 
     private V2d calculateAverageVelocity(Collection<Boid> nearbyBoids) {

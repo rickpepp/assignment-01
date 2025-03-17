@@ -21,7 +21,8 @@ public class SequentialUpdateFlock implements UpdateFlock {
     }
 
     private void updateSingleBoid(Boid boid) {
-        Collection<Boid> nearbyBoids = flock.getNearbyBoids(boid);
+        Collection<Boid> nearbyBoids = this.functions.getNearbyBoids(boid,
+                flock.getBoids(), flock.getPerceptionRadius());
         boid.setVel(functions.getLimitedSpeed(
                 boid.getVel().sum(getAlignmentCohesionSeparationToSum(boid, nearbyBoids)),
                 flock.getMaxSpeed()));
