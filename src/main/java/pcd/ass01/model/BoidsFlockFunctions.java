@@ -13,4 +13,9 @@ public interface BoidsFlockFunctions {
                                                       double cohesionWeight,
                                                       double separationWeight);
     public V2d getLimitedSpeed(V2d actualSpeed, double maxSpeed);
+    public P2d environmentWrapAround(P2d position,
+                                     double minX,
+                                     double maxX,
+                                     double minY,
+                                     double maxY);
 }

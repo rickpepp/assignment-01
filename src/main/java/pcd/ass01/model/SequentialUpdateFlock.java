@@ -4,8 +4,8 @@ import java.util.Collection;
 
 public class SequentialUpdateFlock implements UpdateFlock {
 
-    private Flock flock;
-    private BoidsFlockFunctions functions;
+    private final Flock flock;
+    private final BoidsFlockFunctions functions;
 
 
     public SequentialUpdateFlock(Flock flock) {
@@ -22,14 +22,11 @@ public class SequentialUpdateFlock implements UpdateFlock {
 
     private void updateSingleBoid(Boid boid) {
         Collection<Boid> nearbyBoids = flock.getNearbyBoids(boid);
-        boid.setVel(functions.getLimitedSpeed(boid.getVel().sum(getAlignmentCohesionSeparationToSum(boid, nearbyBoids)),
+        boid.setVel(functions.getLimitedSpeed(
+                boid.getVel().sum(getAlignmentCohesionSeparationToSum(boid, nearbyBoids)),
                 flock.getMaxSpeed()));
         boid.setPos(boid.getPos().sum(boid.getVel()));
-        environmentWrapAround(boid,
-                -flock.getWidth()/2,
-                flock.getWidth()/2,
-                -flock.getHeight()/2,
-                flock.getHeight()/2);
+        environmentWrapAround(boid);
     }
 
     private V2d getAlignmentCohesionSeparationToSum(Boid boid, Collection<Boid> nearbyBoids) {
@@ -42,14 +39,11 @@ public class SequentialUpdateFlock implements UpdateFlock {
                 flock.getSeparationWeight());
     }
 
-    private void environmentWrapAround(Boid boid,
-                                       double minX,
-                                       double maxX,
-                                       double minY,
-                                       double maxY) {
-        if (boid.getPos().x() < minX) boid.setPos(boid.getPos().sum(new V2d(maxX * 2, 0)));
-        if (boid.getPos().x() >= maxX) boid.setPos(boid.getPos().sum(new V2d(minX * 2, 0)));
-        if (boid.getPos().y() < minY) boid.setPos(boid.getPos().sum(new V2d(0, maxY * 2)));
-        if (boid.getPos().y() >= maxY) boid.setPos(boid.getPos().sum(new V2d(0, minY * 2)));
+    private void environmentWrapAround(Boid boid) {
+        boid.setPos(this.functions.environmentWrapAround(boid.getPos(),
+                -flock.getWidth()/2,
+                flock.getWidth()/2,
+                -flock.getHeight()/2,
+                flock.getHeight()/2));
     }
 }

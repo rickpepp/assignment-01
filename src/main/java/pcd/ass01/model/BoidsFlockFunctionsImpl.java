@@ -52,6 +52,15 @@ public class BoidsFlockFunctionsImpl implements BoidsFlockFunctions {
         return (actualSpeed.abs() > maxSpeed) ? actualSpeed.getNormalized().mul(maxSpeed) : actualSpeed;
     }
 
+    @Override
+    public P2d environmentWrapAround(P2d position, double minX, double maxX, double minY, double maxY) {
+        if (position.x() < minX) position = position.sum(new V2d(maxX * 2, 0));
+        if (position.x() >= maxX) position = position.sum(new V2d(minX * 2, 0));
+        if (position.y() < minY) position = position.sum(new V2d(0, maxY * 2));
+        if (position.y() >= maxY) position = position.sum(new V2d(0, minY * 2));
+        return position;
+    }
+
     private V2d calculateAverageVelocity(Collection<Boid> nearbyBoids) {
         return nearbyBoids.stream()
                 .map(Boid::getVel)
