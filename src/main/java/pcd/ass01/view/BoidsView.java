@@ -8,6 +8,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.util.Hashtable;
 
 public class BoidsView implements ChangeListener {
@@ -50,14 +51,7 @@ public class BoidsView implements ChangeListener {
 
 		pauseButton = new JButton("Pause");
 		slidersPanel.add(pauseButton);
-		pauseButton.addActionListener(e -> {
-				this.simulator.changeActiveState();
-				if (this.simulator.getActualState())
-					this.pauseButton.setText("Pause");
-				else
-					this.pauseButton.setText("Resume");
-			}
-		);
+		pauseButton.addActionListener(e -> changeSimulationStatus());
 		        
 		cp.add(BorderLayout.SOUTH, slidersPanel);
 
@@ -109,5 +103,11 @@ public class BoidsView implements ChangeListener {
 		return height;
 	}
 
-
+	public void changeSimulationStatus() {
+		this.simulator.changeActiveState();
+		if (this.simulator.getActualState())
+			this.pauseButton.setText("Pause");
+		else
+			this.pauseButton.setText("Resume");
+	}
 }

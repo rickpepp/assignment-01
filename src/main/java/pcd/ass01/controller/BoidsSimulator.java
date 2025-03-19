@@ -15,6 +15,7 @@ public class BoidsSimulator {
     private Boolean active = true;
     
     private static final int FRAMERATE = 25;
+    private static final int MILLIS_WAIT_PAUSE_EVERY_CYCLE = 200;
     private int framerate;
     
     public BoidsSimulator(BoidsModel model) {
@@ -28,32 +29,40 @@ public class BoidsSimulator {
       
     public void runSimulation() {
     	while (true) {
-            if (active) {
-                var t0 = System.currentTimeMillis();
-                model.update();
-                if (view.isPresent()) {
-                    view.get().update(framerate);
-                    var t1 = System.currentTimeMillis();
-                    var dtElapsed = t1 - t0;
-                    var framratePeriod = 1000 / FRAMERATE;
-
-                    if (dtElapsed < framratePeriod) {
-                        try {
-                            Thread.sleep(framratePeriod - dtElapsed);
-                        } catch (Exception ex) {
-                        }
-                        framerate = FRAMERATE;
-                    } else {
-                        framerate = (int) (1000 / dtElapsed);
-                    }
-                }
-            } else {
-                try {
-                    Thread.sleep(200);
-                } catch (Exception ex) {
-                }
-            }
+            runSingleCycleSimulation();
     	}
+    }
+
+    private void runSingleCycleSimulation() {
+        if (active) {
+            var t0 = System.currentTimeMillis();
+            model.update();
+            if (view.isPresent()) {
+                view.get().update(framerate);
+                var t1 = System.currentTimeMillis();
+                var dtElapsed = t1 - t0;
+                var frameRatePeriod = 1000 / FRAMERATE;
+                handleFrameRate(dtElapsed, frameRatePeriod);
+            }
+        } else {
+            pauseMainThread(MILLIS_WAIT_PAUSE_EVERY_CYCLE);
+        }
+    }
+
+    private void handleFrameRate(long dtElapsed, long frameRatePeriod) {
+        if (dtElapsed < frameRatePeriod) {
+            pauseMainThread(frameRatePeriod - dtElapsed);
+            framerate = FRAMERATE;
+        } else {
+            framerate = (int) (1000 / dtElapsed);
+        }
+    }
+
+    private void pauseMainThread(long millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (Exception ex) {
+        }
     }
 
     public Collection<P2d> getBoidsPosition() {
