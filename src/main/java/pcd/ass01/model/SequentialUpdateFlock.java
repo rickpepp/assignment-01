@@ -7,7 +7,6 @@ public class SequentialUpdateFlock implements UpdateFlock {
     private final Flock flock;
     private final BoidsFlockFunctions functions;
 
-
     public SequentialUpdateFlock(Flock flock) {
         this.flock = flock;
         this.functions = new BoidsFlockFunctionsImpl();
@@ -15,19 +14,21 @@ public class SequentialUpdateFlock implements UpdateFlock {
 
     @Override
     public void update() {
-        for (Boid boid : this.flock.getBoids()) {
-            updateSingleBoid(boid);
-        }
+        this.flock.getBoids().forEach(this::updateVelocitySingleBoid);
+        this.flock.getBoids().forEach(this::updatePositionSingleBoid);
     }
 
-    private void updateSingleBoid(Boid boid) {
+    private void updatePositionSingleBoid(Boid boid) {
+        boid.setPos(boid.getPos().sum(boid.getVel()));
+        environmentWrapAround(boid);
+    }
+
+    private void updateVelocitySingleBoid(Boid boid) {
         Collection<Boid> nearbyBoids = this.functions.getNearbyBoids(boid,
                 flock.getBoids(), flock.getPerceptionRadius());
         boid.setVel(functions.getLimitedSpeed(
                 boid.getVel().sum(getAlignmentCohesionSeparationToSum(boid, nearbyBoids)),
                 flock.getMaxSpeed()));
-        boid.setPos(boid.getPos().sum(boid.getVel()));
-        environmentWrapAround(boid);
     }
 
     private V2d getAlignmentCohesionSeparationToSum(Boid boid, Collection<Boid> nearbyBoids) {

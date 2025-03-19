@@ -35,7 +35,7 @@ public class BoidsSimulationView implements ChangeListener  {
         slidersPanel.add(alignmentSlider);
         slidersPanel.add(new JLabel("Cohesion"));
         slidersPanel.add(cohesionSlider);
-        pauseButton = new JButton("Pause");
+        pauseButton = new JButton("Start");
         slidersPanel.add(pauseButton);
         pauseButton.addActionListener(e -> changeSimulationStatus());
         cp.add(BorderLayout.SOUTH, slidersPanel);
