@@ -28,7 +28,7 @@ public class BoidsModel {
                 .cohesionWeight(initialCohesionWeight)
                 .buildFlock();
         createRandomBoids(nBoids);
-        this.updateFlock = new SequentialUpdateFlock(flock);
+        this.updateFlock = new DefaultThreadUpdateFlock(flock);
     }
 
     private void createRandomBoids(int nBoids) {
