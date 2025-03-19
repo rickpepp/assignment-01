@@ -55,8 +55,8 @@ public class BoidsView  {
 		return this.simulator;
 	}
 
-	public void selectedNumberOfBoids(int i) {
-		simulator.setNumberOfBoids(i);
+	public void passToSimulationView(int numberOfBoids, String threadMode) {
+		simulator.createModel(numberOfBoids, threadMode);
 		boidsSimulationView();
 	}
 }

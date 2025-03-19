@@ -95,7 +95,7 @@ public class BoidsSimulator {
         return this.active;
     }
 
-    public void setNumberOfBoids(int nOfBoids) {
+    public void createModel(int nOfBoids, String threadMode) {
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         int width = gd.getDisplayMode().getWidth();
         int height = gd.getDisplayMode().getHeight();
@@ -106,6 +106,7 @@ public class BoidsSimulator {
                 height,
                 MAX_SPEED,
                 PERCEPTION_RADIUS,
-                AVOID_RADIUS);
+                AVOID_RADIUS,
+                threadMode);
     }
 }

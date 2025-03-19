@@ -15,8 +15,8 @@ public class BoidsModel {
     						double height,
     						double maxSpeed,
     						double perceptionRadius,
-    						double avoidRadius){
-
+    						double avoidRadius,
+                            String threadMode){
         this.flock = new FlockBuilder()
                 .width(width)
                 .height(height)
@@ -28,7 +28,15 @@ public class BoidsModel {
                 .cohesionWeight(initialCohesionWeight)
                 .buildFlock();
         createRandomBoids(nBoids);
-        this.updateFlock = new DefaultThreadUpdateFlock(flock);
+        updateFlock = createUpdateFlockFromString(threadMode);
+    }
+
+    private UpdateFlock createUpdateFlockFromString(String threadMode) {
+        return switch (threadMode) {
+            case "Sequential" -> new SequentialUpdateFlock(flock);
+            case "Default Multithread" -> new DefaultThreadUpdateFlock(flock);
+            default -> throw new RuntimeException("Update Flock not Initialized");
+        };
     }
 
     private void createRandomBoids(int nBoids) {
