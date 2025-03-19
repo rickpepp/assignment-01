@@ -16,6 +16,7 @@ public class BoidsView implements ChangeListener {
 	private BoidsPanel boidsPanel;
 	private JSlider cohesionSlider, separationSlider, alignmentSlider;
 	private BoidsSimulator simulator;
+	private JButton pauseButton;
 	private int width, height;
 	
 	public BoidsView(BoidsSimulator simulator, int width, int height) {
@@ -46,6 +47,17 @@ public class BoidsView implements ChangeListener {
         slidersPanel.add(alignmentSlider);
         slidersPanel.add(new JLabel("Cohesion"));
         slidersPanel.add(cohesionSlider);
+
+		pauseButton = new JButton("Pause");
+		slidersPanel.add(pauseButton);
+		pauseButton.addActionListener(e -> {
+				this.simulator.changeActiveState();
+				if (this.simulator.getActualState())
+					this.pauseButton.setText("Pause");
+				else
+					this.pauseButton.setText("Resume");
+			}
+		);
 		        
 		cp.add(BorderLayout.SOUTH, slidersPanel);
 
@@ -96,5 +108,6 @@ public class BoidsView implements ChangeListener {
 	public int getHeight() {
 		return height;
 	}
+
 
 }

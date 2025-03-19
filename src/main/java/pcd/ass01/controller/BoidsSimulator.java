@@ -12,6 +12,7 @@ public class BoidsSimulator {
 
     private BoidsModel model;
     private Optional<BoidsView> view;
+    private Boolean active = true;
     
     private static final int FRAMERATE = 25;
     private int framerate;
@@ -27,23 +28,31 @@ public class BoidsSimulator {
       
     public void runSimulation() {
     	while (true) {
-            var t0 = System.currentTimeMillis();
-            model.update();
-    		if (view.isPresent()) {
-            	view.get().update(framerate);
-            	var t1 = System.currentTimeMillis();
-                var dtElapsed = t1 - t0;
-                var framratePeriod = 1000/FRAMERATE;
-                
-                if (dtElapsed < framratePeriod) {		
-                	try {
-                		Thread.sleep(framratePeriod - dtElapsed);
-                	} catch (Exception ex) {}
-                	framerate = FRAMERATE;
-                } else {
-                	framerate = (int) (1000/dtElapsed);
+            if (active) {
+                var t0 = System.currentTimeMillis();
+                model.update();
+                if (view.isPresent()) {
+                    view.get().update(framerate);
+                    var t1 = System.currentTimeMillis();
+                    var dtElapsed = t1 - t0;
+                    var framratePeriod = 1000 / FRAMERATE;
+
+                    if (dtElapsed < framratePeriod) {
+                        try {
+                            Thread.sleep(framratePeriod - dtElapsed);
+                        } catch (Exception ex) {
+                        }
+                        framerate = FRAMERATE;
+                    } else {
+                        framerate = (int) (1000 / dtElapsed);
+                    }
                 }
-    		}
+            } else {
+                try {
+                    Thread.sleep(200);
+                } catch (Exception ex) {
+                }
+            }
     	}
     }
 
@@ -61,5 +70,13 @@ public class BoidsSimulator {
 
     public void setAlignmentWeight(double alignmentWeight) {
         this.model.setAlignmentWeight(alignmentWeight);
+    }
+
+    public void changeActiveState() {
+        this.active = !this.active;
+    }
+
+    public Boolean getActualState() {
+        return this.active;
     }
 }
