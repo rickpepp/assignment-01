@@ -114,4 +114,15 @@ class FlockTest {
         flock.setCohesionWeight(19);
         assertEquals(19, flock.getCohesionWeight());
     }
+
+    @Test
+    void updateBoid() {
+        Flock flock = new FlockBuilder()
+                .cohesionWeight(10)
+                .buildFlock();
+        Boid boid1 = new Boid(new P2d(0, 2), new V2d(0, 0));
+        Boid boid2 = new Boid(new P2d(2, 0), new V2d(0, 0));
+        flock.addBoid(boid1);
+        flock.addBoid(boid2);
+    }
 }

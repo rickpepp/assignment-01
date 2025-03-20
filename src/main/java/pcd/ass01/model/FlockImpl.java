@@ -2,10 +2,11 @@ package pcd.ass01.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class FlockImpl implements Flock {
 
-    private final Collection<Boid> boids;
+    private Collection<Boid> boids;
     private final double width;
     private final double height;
     private final double maxSpeed;
@@ -23,7 +24,7 @@ public class FlockImpl implements Flock {
                      double separationWeight,
                      double alignmentWeight,
                      double cohesionWeight) {
-        this.boids = new ArrayList<>();
+        this.boids = new CopyOnWriteArrayList<>();
         this.width = width;
         this.height = height;
         this.maxSpeed = maxSpeed;
@@ -42,6 +43,18 @@ public class FlockImpl implements Flock {
     @Override
     public synchronized void addBoid(Boid boid) {
         this.boids.add(boid);
+    }
+
+    @Override
+    public synchronized void updateBoid(Boid oldBoid, Boid newBoid) {
+        if(!this.boids.remove(oldBoid))
+            throw new IllegalStateException(Thread.currentThread().getName() + ": Cannot find boid");
+        this.boids.add(newBoid);
+    }
+
+    @Override
+    public void updateBoids(Collection<Boid> newBoids) {
+        this.boids = newBoids;
     }
 
     @Override

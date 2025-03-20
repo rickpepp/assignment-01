@@ -10,25 +10,37 @@ public class UpdatePositionWorker extends Thread {
     private int start;
     private int numberOfElements;
     private final BoidsFlockFunctions functions;
+    private Collection<Boid> newBoids;
 
-    public UpdatePositionWorker(Flock flock, int start, int end) {
+    public UpdatePositionWorker(Flock flock, int start, int end, Collection<Boid> newBoids) {
         this.flock = flock;
         this.start = start;
         this.numberOfElements = end - start + 1;
         this.functions = new BoidsFlockFunctionsImpl();
+        this.newBoids = newBoids;
     }
 
     @Override
     public void run() {
-        this.flock.getBoids().stream().skip(start).limit(numberOfElements).forEach(this::updateVelocitySingleBoid);
+        this.flock.getBoids().stream().skip(start).limit(numberOfElements).forEach(this::updateSingleBoid);
     }
 
-    private void updateVelocitySingleBoid(Boid boid) {
+    private void updateSingleBoid(Boid boid) {
         Collection<Boid> nearbyBoids = this.functions.getNearbyBoids(boid,
                 flock.getBoids(), flock.getPerceptionRadius());
-        boid.setVel(functions.getLimitedSpeed(
+        V2d velocity = functions.getLimitedSpeed(
                 boid.getVel().sum(getAlignmentCohesionSeparationToSum(boid, nearbyBoids)),
-                flock.getMaxSpeed()));
+                flock.getMaxSpeed());
+        P2d position = environmentWrapAround(boid.getPos().sum(boid.getVel()));
+        newBoids.add(new Boid(position, velocity));
+    }
+
+    private P2d environmentWrapAround(P2d boidPosition) {
+        return this.functions.environmentWrapAround(boidPosition,
+                -flock.getWidth()/2,
+                flock.getWidth()/2,
+                -flock.getHeight()/2,
+                flock.getHeight()/2);
     }
 
     private V2d getAlignmentCohesionSeparationToSum(Boid boid, Collection<Boid> nearbyBoids) {
