@@ -33,7 +33,7 @@ public class SequentialUpdateFlock implements UpdateFlock {
         V2d newVelocity = functions.getLimitedSpeed(
                 boid.getVel().sum(getAlignmentCohesionSeparationToSum(boid, nearbyBoids)),
                 flock.getMaxSpeed());
-        P2d newPosition = environmentWrapAround(boid.getPos().sum(boid.getVel()));
+        P2d newPosition = environmentWrapAround(boid.getPos().sum(newVelocity));
         newBoids.get().add(new Boid(newPosition, newVelocity));
     }
 

@@ -16,7 +16,7 @@ public class BoidsSimulator {
     private Boolean active = false;
     private int framerate;
     
-    private static final int FRAMERATE = 75;
+    private static final int FRAMERATE = 60;
     private static final int MILLIS_WAIT_PAUSE_EVERY_CYCLE = 200;
     private final static double SEPARATION_WEIGHT = 1.0;
     private final static double ALIGNMENT_WEIGHT = 1.0;

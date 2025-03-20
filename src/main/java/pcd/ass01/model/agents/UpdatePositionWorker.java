@@ -31,7 +31,7 @@ public class UpdatePositionWorker extends Thread {
         V2d velocity = functions.getLimitedSpeed(
                 boid.getVel().sum(getAlignmentCohesionSeparationToSum(boid, nearbyBoids)),
                 flock.getMaxSpeed());
-        P2d position = environmentWrapAround(boid.getPos().sum(boid.getVel()));
+        P2d position = environmentWrapAround(boid.getPos().sum(velocity));
         newBoids.add(new Boid(position, velocity));
     }
 
