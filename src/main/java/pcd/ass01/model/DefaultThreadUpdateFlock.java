@@ -8,27 +8,20 @@ public class DefaultThreadUpdateFlock implements UpdateFlock {
 
     private final Flock flock;
     private final int numberOfProcessor;
-    private Optional<Collection<Boid>> newBoidsCollection;
 
     public DefaultThreadUpdateFlock(Flock flock) {
         this.flock = flock;
         this.numberOfProcessor = Runtime.getRuntime().availableProcessors();
-        newBoidsCollection = Optional.empty();
     }
 
     @Override
     public void update() {
-        if (newBoidsCollection.isEmpty())
-            newBoidsCollection = Optional.of(Collections.synchronizedCollection(new ArrayList<>(flock.getBoids().size())));
-        else
-            newBoidsCollection.get().clear();
-        updateBoids(newBoidsCollection.get());
-        this.flock.updateBoids(new ArrayList<>(newBoidsCollection.get()));
+        updateBoids();
     }
 
-    private void updateBoids(Collection<Boid> newBoidsCollection) {
+    private void updateBoids() {
         List<UpdatePositionWorker> workers = new ArrayList<>();
-        createAndStartWorkers(workers, numberOfProcessor, newBoidsCollection);
+        createAndStartWorkers(workers, numberOfProcessor);
         joinThreads(workers);
     }
 
@@ -43,19 +36,18 @@ public class DefaultThreadUpdateFlock implements UpdateFlock {
     }
 
     private void createAndStartWorkers(List<UpdatePositionWorker> workers,
-                                       int numberOfProcessor,
-                                       Collection<Boid> newBoidsCollection) {
+                                       int numberOfProcessor) {
         int jobSize = this.flock.getBoids().size()/numberOfProcessor;
         int from = 0;
         int to = jobSize - 1;
         for (int i = 0; i < numberOfProcessor - 1; i++) {
-            var w = new UpdatePositionWorker(this.flock, from, to, newBoidsCollection);
+            var w = new UpdatePositionWorker(this.flock, from, to);
             w.start();
             workers.add(w);
             from = to + 1;
             to += jobSize;
         }
-        var w = new UpdatePositionWorker(this.flock, from, this.flock.getBoids().size() - 1, newBoidsCollection);
+        var w = new UpdatePositionWorker(this.flock, from, this.flock.getBoids().size() - 1);
         w.start();
         workers.add(w);
     }

@@ -10,14 +10,12 @@ public class UpdatePositionWorker extends Thread {
     private int start;
     private int numberOfElements;
     private final BoidsFlockFunctions functions;
-    private Collection<Boid> newBoids;
 
-    public UpdatePositionWorker(Flock flock, int start, int end, Collection<Boid> newBoids) {
+    public UpdatePositionWorker(Flock flock, int start, int end) {
         this.flock = flock;
         this.start = start;
         this.numberOfElements = end - start + 1;
         this.functions = new BoidsFlockFunctionsImpl();
-        this.newBoids = newBoids;
     }
 
     @Override
@@ -32,7 +30,7 @@ public class UpdatePositionWorker extends Thread {
                 boid.getVel().sum(getAlignmentCohesionSeparationToSum(boid, nearbyBoids)),
                 flock.getMaxSpeed());
         P2d position = environmentWrapAround(boid.getPos().sum(velocity));
-        newBoids.add(new Boid(position, velocity));
+        flock.updateBoid(new Boid(position, velocity));
     }
 
     private P2d environmentWrapAround(P2d boidPosition) {

@@ -8,22 +8,15 @@ public class SequentialUpdateFlock implements UpdateFlock {
 
     private final Flock flock;
     private final BoidsFlockFunctions functions;
-    private Optional<Collection<Boid>> newBoids;
 
     public SequentialUpdateFlock(Flock flock) {
         this.flock = flock;
         this.functions = new BoidsFlockFunctionsImpl();
-        newBoids = Optional.empty();
     }
 
     @Override
     public void update() {
-        if (newBoids.isEmpty())
-            newBoids = Optional.of(new ArrayList<>(flock.getBoids().size()));
-        else
-            newBoids.get().clear();
         this.flock.getBoids().forEach(this::updateSingleBoid);
-        this.flock.updateBoids(new ArrayList<>(newBoids.get()));
     }
 
 
@@ -34,7 +27,7 @@ public class SequentialUpdateFlock implements UpdateFlock {
                 boid.getVel().sum(getAlignmentCohesionSeparationToSum(boid, nearbyBoids)),
                 flock.getMaxSpeed());
         P2d newPosition = environmentWrapAround(boid.getPos().sum(newVelocity));
-        newBoids.get().add(new Boid(newPosition, newVelocity));
+        flock.updateBoid(new Boid(newPosition, newVelocity));
     }
 
     private V2d getAlignmentCohesionSeparationToSum(Boid boid, Collection<Boid> nearbyBoids) {
