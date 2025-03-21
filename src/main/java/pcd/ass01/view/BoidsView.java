@@ -39,8 +39,8 @@ public class BoidsView  {
 	}
 
 	
-	public void update(int frameRate) {
-		simulationView.update(frameRate);
+	public void update(int frameRate, double avgFramerate) {
+		simulationView.update(frameRate, avgFramerate);
 	}
 
 	public int getWidth() {

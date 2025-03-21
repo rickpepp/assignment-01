@@ -57,8 +57,9 @@ public class BoidsSimulationView implements ChangeListener  {
         }
     }
 
-    public void update(int frameRate) {
+    public void update(int frameRate, double avgFramerate) {
         boidsPanel.setFrameRate(frameRate);
+        boidsPanel.setAvgFramerate(avgFramerate);
         boidsPanel.repaint();
     }
 

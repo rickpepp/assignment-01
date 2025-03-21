@@ -6,6 +6,7 @@ import pcd.ass01.model.P2d;
 import pcd.ass01.view.BoidsView;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -15,6 +16,7 @@ public class BoidsSimulator {
     private Optional<BoidsView> view;
     private Boolean active = false;
     private int framerate;
+    private Collection<Integer> avgFrameRate;
     
     private static final int FRAMERATE = 60;
     private static final int MILLIS_WAIT_PAUSE_EVERY_CYCLE = 200;
@@ -27,6 +29,8 @@ public class BoidsSimulator {
     
     public BoidsSimulator() {
         view = Optional.empty();
+        avgFrameRate = new ArrayList<>();
+        avgFrameRate.add(0);
     }
 
     public void attachView(BoidsView view) {
@@ -44,7 +48,8 @@ public class BoidsSimulator {
             var t0 = System.currentTimeMillis();
             model.update();
             if (view.isPresent()) {
-                view.get().update(framerate);
+                view.get().update(framerate, avgFrameRate.stream().
+                        mapToDouble(Math::round).average().getAsDouble());
                 var t1 = System.currentTimeMillis();
                 var dtElapsed = t1 - t0;
                 var frameRatePeriod = 1000 / FRAMERATE;
@@ -62,6 +67,7 @@ public class BoidsSimulator {
         } else {
             framerate = (int) (1000 / dtElapsed);
         }
+        avgFrameRate.add(framerate);
     }
 
     private void pauseMainThread(long millis) {

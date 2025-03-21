@@ -13,6 +13,7 @@ public class BoidsPanel extends JPanel {
 	private BoidsView view;
 	private BoidsSimulator simulator;
     private int framerate;
+    private double avgFramerate;
 
     public BoidsPanel(BoidsView view, BoidsSimulator simulator) {
     	this.simulator = simulator;
@@ -49,5 +50,10 @@ public class BoidsPanel extends JPanel {
         g.setColor(Color.BLACK);
         g.drawString("Num. Boids: " + boids.size(), 10, 25);
         g.drawString("Framerate: " + framerate, 10, 40);
+        g.drawString("Avg Framerate: " + String.format("%.1f", avgFramerate), 10, 55);
    }
+
+    public void setAvgFramerate(double avgFramerate) {
+        this.avgFramerate = avgFramerate;
+    }
 }
