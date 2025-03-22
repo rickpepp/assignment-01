@@ -5,8 +5,8 @@ import java.awt.*;
 
 public class SelectNumberBoidsView {
 
-    private JFrame frame;
-    private BoidsView view;
+    private final JFrame frame;
+    private final BoidsView view;
     private JComboBox<String> threadMode;
     private JTextField inputBox;
 
@@ -22,7 +22,7 @@ public class SelectNumberBoidsView {
         JLabel label = new JLabel("Insert number of boids:");
         inputBox = new JTextField(20);
         JLabel modelLabel = new JLabel("Select thread mode:");
-        String[] optionToChoose = {"Sequential", "Default Multithread", "Executor Framework"};
+        String[] optionToChoose = {"Sequential", "Default Multithread", "Executor Framework", "Virtual Thread"};
         threadMode = new JComboBox<>(optionToChoose);
         JButton button = new JButton("Start Simulation");
         button.addActionListener(e -> actionStartSimulationButton());

@@ -1,7 +1,5 @@
 package pcd.ass01.model;
 
-import pcd.ass01.model.agents.UpdatePositionWorker;
-
 import java.util.*;
 
 public class DefaultThreadUpdateFlock implements UpdateFlock {

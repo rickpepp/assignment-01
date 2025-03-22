@@ -14,9 +14,10 @@ import java.util.Hashtable;
 
 public class BoidsView  {
 
-	private JFrame frame;
-	private BoidsSimulator simulator;
-	private int width, height;
+	private final JFrame frame;
+	private final BoidsSimulator simulator;
+	private final int width;
+    private final int height;
 
 	private BoidsSimulationView simulationView;
 	

@@ -7,8 +7,8 @@ import java.awt.*;
 import java.util.Hashtable;
 
 public class BoidsSimulationView implements ChangeListener  {
-    private JFrame frame;
-    private BoidsView view;
+    private final JFrame frame;
+    private final BoidsView view;
     private BoidsPanel boidsPanel;
     private JSlider cohesionSlider, separationSlider, alignmentSlider;
     private JButton pauseButton;

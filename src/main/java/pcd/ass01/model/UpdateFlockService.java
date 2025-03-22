@@ -16,7 +16,7 @@ public class UpdateFlockService implements Callable<Void> {
     }
 
     @Override
-    public Void call() throws Exception {
+    public Void call() {
         Collection<Boid> nearbyBoids = this.functions.getNearbyBoids(boid,
                 flock.getBoids(), flock.getPerceptionRadius());
         V2d velocity = functions.getLimitedSpeed(

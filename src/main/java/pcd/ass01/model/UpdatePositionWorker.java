@@ -1,6 +1,4 @@
-package pcd.ass01.model.agents;
-
-import pcd.ass01.model.*;
+package pcd.ass01.model;
 
 import java.util.Collection;
 
