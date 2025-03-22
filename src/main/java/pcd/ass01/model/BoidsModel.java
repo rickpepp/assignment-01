@@ -35,6 +35,7 @@ public class BoidsModel {
         return switch (threadMode) {
             case "Sequential" -> new SequentialUpdateFlock(flock);
             case "Default Multithread" -> new DefaultThreadUpdateFlock(flock);
+            case "Executor Framework" -> new ExecutorServiceUpdateFlock(flock);
             default -> throw new RuntimeException("Update Flock not Initialized");
         };
     }
