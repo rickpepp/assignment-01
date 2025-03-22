@@ -1,6 +1,5 @@
 package pcd.ass01.controller;
 
-import pcd.ass01.model.BoidsModel;
 import pcd.ass01.view.BoidsView;
 
 import java.awt.*;

@@ -1,8 +1,6 @@
 package pcd.ass01.model;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Optional;
 
 public class SequentialUpdateFlock implements UpdateFlock {
 
