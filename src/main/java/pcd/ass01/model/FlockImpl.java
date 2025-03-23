@@ -9,9 +9,9 @@ public class FlockImpl implements Flock {
     private final double maxSpeed;
     private final double perceptionRadius;
     private final double avoidRadius;
-    private final SingleValueMonitor separationWeightMonitor;
-    private final SingleValueMonitor cohesionWeightMonitor;
-    private final SingleValueMonitor alignmentWeightMonitor;
+    private final SingleValueMonitor<Double> separationWeightMonitor;
+    private final SingleValueMonitor<Double> cohesionWeightMonitor;
+    private final SingleValueMonitor<Double> alignmentWeightMonitor;
     private final BoidsMonitor boidsMonitor;
 
     public FlockImpl(double width,

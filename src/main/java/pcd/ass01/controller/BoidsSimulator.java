@@ -3,6 +3,7 @@ package pcd.ass01.controller;
 import pcd.ass01.model.Boid;
 import pcd.ass01.model.BoidsModel;
 import pcd.ass01.model.P2d;
+import pcd.ass01.model.SingleValueMonitor;
 import pcd.ass01.view.BoidsView;
 
 import java.awt.*;
@@ -13,7 +14,7 @@ public class BoidsSimulator {
 
     private BoidsModel model;
     private Optional<BoidsView> view;
-    private Boolean active = false;
+    private SingleValueMonitor<Boolean> activeMonitor;
     private int framerate;
     private double avgFrameRate;
     private int frameRateCount;
@@ -31,6 +32,8 @@ public class BoidsSimulator {
         view = Optional.empty();
         avgFrameRate = 0;
         frameRateCount = 0;
+        this.activeMonitor = new SingleValueMonitor<>();
+        this.activeMonitor.setValue(Boolean.FALSE);
     }
 
     public void attachView(BoidsView view) {
@@ -44,7 +47,7 @@ public class BoidsSimulator {
     }
 
     private void runSingleCycleSimulation() {
-        if (active) {
+        if (this.activeMonitor.getValue()) {
             var t0 = System.currentTimeMillis();
             model.update();
             if (view.isPresent()) {
@@ -99,11 +102,11 @@ public class BoidsSimulator {
     }
 
     public void changeActiveState() {
-        this.active = !this.active;
+        this.activeMonitor.setValue(!this.activeMonitor.getValue());
     }
 
     public Boolean getActualState() {
-        return this.active;
+        return this.activeMonitor.getValue();
     }
 
     public void createModel(int nOfBoids, String threadMode) {
