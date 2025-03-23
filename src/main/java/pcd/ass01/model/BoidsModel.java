@@ -1,5 +1,7 @@
 package pcd.ass01.model;
 
+import pcd.ass01.controller.updateFlock.*;
+
 import java.util.Collection;
 
 public class BoidsModel {

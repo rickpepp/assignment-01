@@ -1,4 +1,8 @@
-package pcd.ass01.model;
+package pcd.ass01.controller.updateFlock;
+
+import pcd.ass01.model.Boid;
+import pcd.ass01.model.P2d;
+import pcd.ass01.model.V2d;
 
 import java.util.Collection;
 

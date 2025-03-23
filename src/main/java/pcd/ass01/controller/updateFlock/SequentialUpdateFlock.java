@@ -1,42 +1,33 @@
-package pcd.ass01.model;
+package pcd.ass01.controller.updateFlock;
+
+import pcd.ass01.model.*;
 
 import java.util.Collection;
 
-public class UpdatePositionWorker extends Thread {
+public class SequentialUpdateFlock implements UpdateFlock {
 
-    private Flock flock;
-    private int start;
-    private int numberOfElements;
+    private final Flock flock;
     private final BoidsFlockFunctions functions;
 
-    public UpdatePositionWorker(Flock flock, int start, int end) {
+    public SequentialUpdateFlock(Flock flock) {
         this.flock = flock;
-        this.start = start;
-        this.numberOfElements = end - start + 1;
         this.functions = new BoidsFlockFunctionsImpl();
     }
 
     @Override
-    public void run() {
-        this.flock.getBoids().stream().skip(start).limit(numberOfElements).forEach(this::updateSingleBoid);
+    public void update() {
+        this.flock.getBoids().forEach(this::updateSingleBoid);
     }
+
 
     private void updateSingleBoid(Boid boid) {
         Collection<Boid> nearbyBoids = this.functions.getNearbyBoids(boid,
                 flock.getBoids(), flock.getPerceptionRadius());
-        V2d velocity = functions.getLimitedSpeed(
+        V2d newVelocity = functions.getLimitedSpeed(
                 boid.getVel().sum(getAlignmentCohesionSeparationToSum(boid, nearbyBoids)),
                 flock.getMaxSpeed());
-        P2d position = environmentWrapAround(boid.getPos().sum(velocity));
-        flock.updateBoid(new Boid(position, velocity));
-    }
-
-    private P2d environmentWrapAround(P2d boidPosition) {
-        return this.functions.environmentWrapAround(boidPosition,
-                -flock.getWidth()/2,
-                flock.getWidth()/2,
-                -flock.getHeight()/2,
-                flock.getHeight()/2);
+        P2d newPosition = environmentWrapAround(boid.getPos().sum(newVelocity));
+        flock.updateBoid(new Boid(newPosition, newVelocity));
     }
 
     private V2d getAlignmentCohesionSeparationToSum(Boid boid, Collection<Boid> nearbyBoids) {
@@ -47,5 +38,13 @@ public class UpdatePositionWorker extends Thread {
                 flock.getAlignmentWeight(),
                 flock.getCohesionWeight(),
                 flock.getSeparationWeight());
+    }
+
+    private P2d environmentWrapAround(P2d position) {
+        return this.functions.environmentWrapAround(position,
+                -flock.getWidth()/2,
+                flock.getWidth()/2,
+                -flock.getHeight()/2,
+                flock.getHeight()/2);
     }
 }

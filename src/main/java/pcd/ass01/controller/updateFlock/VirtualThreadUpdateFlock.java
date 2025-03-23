@@ -1,14 +1,17 @@
-package pcd.ass01.model;
+package pcd.ass01.controller.updateFlock;
 
-import java.util.concurrent.*;
+import pcd.ass01.model.Flock;
 
-public class ExecutorServiceUpdateFlock implements UpdateFlock {
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class VirtualThreadUpdateFlock implements UpdateFlock {
 
     private final ExecutorService executor;
     private final Flock flock;
 
-    public ExecutorServiceUpdateFlock(Flock flock) {
-        executor = new ForkJoinPool(Runtime.getRuntime().availableProcessors());
+    public VirtualThreadUpdateFlock(Flock flock) {
+        executor = Executors.newVirtualThreadPerTaskExecutor();
         this.flock = flock;
     }
 
@@ -21,5 +24,4 @@ public class ExecutorServiceUpdateFlock implements UpdateFlock {
             throw new RuntimeException(e);
         }
     }
-
 }

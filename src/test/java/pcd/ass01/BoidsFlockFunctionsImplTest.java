@@ -2,6 +2,8 @@ package pcd.ass01;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import pcd.ass01.controller.updateFlock.BoidsFlockFunctions;
+import pcd.ass01.controller.updateFlock.BoidsFlockFunctionsImpl;
 import pcd.ass01.model.*;
 
 import java.util.ArrayList;

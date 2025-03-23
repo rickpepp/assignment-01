@@ -1,4 +1,6 @@
-package pcd.ass01.model;
+package pcd.ass01.controller.updateFlock;
+
+import pcd.ass01.model.*;
 
 import java.util.Collection;
 import java.util.concurrent.Callable;
