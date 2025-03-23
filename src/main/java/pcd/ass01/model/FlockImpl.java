@@ -9,8 +9,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class FlockImpl implements Flock {
 
-    private Collection<Boid> boids;
-    private final Collection<Boid> tempNewBoids;
     private final double width;
     private final double height;
     private final double maxSpeed;
@@ -19,7 +17,11 @@ public class FlockImpl implements Flock {
     private double separationWeight;
     private double alignmentWeight;
     private double cohesionWeight;
-    private final Lock updateBoidMutex;
+
+    private final Lock separationMutex;
+    private final Lock cohesionMutex;
+
+    private final BoidsMonitor boidsMonitor;
 
     public FlockImpl(double width,
                      double height,
@@ -29,8 +31,6 @@ public class FlockImpl implements Flock {
                      double separationWeight,
                      double alignmentWeight,
                      double cohesionWeight) {
-        this.boids = new ArrayList<>();
-        this.tempNewBoids = new ArrayList<>();
         this.width = width;
         this.height = height;
         this.maxSpeed = maxSpeed;
@@ -39,61 +39,59 @@ public class FlockImpl implements Flock {
         this.separationWeight = separationWeight;
         this.alignmentWeight = alignmentWeight;
         this.cohesionWeight = cohesionWeight;
-        this.updateBoidMutex = new ReentrantLock();
+        this.separationMutex = new ReentrantLock();
+        this.cohesionMutex = new ReentrantLock();
+        this.boidsMonitor = new BoidsMonitor();
     }
 
     @Override
-    public synchronized Collection<Boid> getBoids() {
-        return boids;
+    public Collection<Boid> getBoids() {
+        return this.boidsMonitor.getBoids();
     }
 
     @Override
-    public synchronized void addBoid(Boid boid) {
-        this.boids.add(boid);
+    public void addBoid(Boid boid) {
+        this.boidsMonitor.addBoid(boid);
     }
 
     @Override
     public void updateBoid(Boid newBoid) {
-        try {
-            updateBoidMutex.lock();
-            tempNewBoids.add(newBoid);
-            if (tempNewBoids.size() == boids.size()) {
-                boids = new ArrayList<>(tempNewBoids);
-                tempNewBoids.clear();
-            }
-        } finally {
-            updateBoidMutex.unlock();
-        }
+        this.boidsMonitor.updateBoid(newBoid);
     }
 
     @Override
-    public synchronized double getWidth() {
+    public  double getWidth() {
         return width;
     }
 
     @Override
-    public synchronized double getHeight() {
+    public  double getHeight() {
         return height;
     }
 
     @Override
-    public synchronized double getMaxSpeed() {
+    public  double getMaxSpeed() {
         return maxSpeed;
     }
 
     @Override
-    public synchronized double getPerceptionRadius() {
+    public  double getPerceptionRadius() {
         return perceptionRadius;
     }
 
     @Override
-    public synchronized double getAvoidRadius() {
+    public  double getAvoidRadius() {
         return avoidRadius;
     }
 
     @Override
-    public synchronized double getSeparationWeight() {
-        return separationWeight;
+    public double getSeparationWeight() {
+        try {
+            separationMutex.lock();
+            return separationWeight;
+        } finally {
+            separationMutex.unlock();
+        }
     }
 
     @Override
@@ -102,13 +100,23 @@ public class FlockImpl implements Flock {
     }
 
     @Override
-    public synchronized double getCohesionWeight() {
-        return cohesionWeight;
+    public double getCohesionWeight() {
+        try {
+            cohesionMutex.lock();
+            return cohesionWeight;
+        } finally {
+            cohesionMutex.unlock();
+        }
     }
 
     @Override
-    public synchronized void setSeparationWeight(double separationWeight) {
-        this.separationWeight = separationWeight;
+    public void setSeparationWeight(double separationWeight) {
+        try {
+            separationMutex.lock();
+            this.separationWeight = separationWeight;
+        } finally {
+            separationMutex.unlock();
+        }
     }
 
     @Override
@@ -117,8 +125,12 @@ public class FlockImpl implements Flock {
     }
 
     @Override
-    public synchronized void setCohesionWeight(double cohesionWeight) {
-        this.cohesionWeight = cohesionWeight;
+    public void setCohesionWeight(double cohesionWeight) {
+        try {
+            cohesionMutex.lock();
+            this.cohesionWeight = cohesionWeight;
+        } finally {
+            cohesionMutex.unlock();
+        }
     }
-
 }
