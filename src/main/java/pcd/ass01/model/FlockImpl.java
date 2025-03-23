@@ -1,11 +1,6 @@
 package pcd.ass01.model;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class FlockImpl implements Flock {
 
@@ -14,13 +9,9 @@ public class FlockImpl implements Flock {
     private final double maxSpeed;
     private final double perceptionRadius;
     private final double avoidRadius;
-    private double separationWeight;
-    private double alignmentWeight;
-    private double cohesionWeight;
-
-    private final Lock separationMutex;
-    private final Lock cohesionMutex;
-
+    private final SingleValueMonitor separationWeightMonitor;
+    private final SingleValueMonitor cohesionWeightMonitor;
+    private final SingleValueMonitor alignmentWeightMonitor;
     private final BoidsMonitor boidsMonitor;
 
     public FlockImpl(double width,
@@ -36,11 +27,12 @@ public class FlockImpl implements Flock {
         this.maxSpeed = maxSpeed;
         this.perceptionRadius = perceptionRadius;
         this.avoidRadius = avoidRadius;
-        this.separationWeight = separationWeight;
-        this.alignmentWeight = alignmentWeight;
-        this.cohesionWeight = cohesionWeight;
-        this.separationMutex = new ReentrantLock();
-        this.cohesionMutex = new ReentrantLock();
+        this.separationWeightMonitor = new SingleValueMonitor();
+        this.alignmentWeightMonitor = new SingleValueMonitor();
+        this.cohesionWeightMonitor = new SingleValueMonitor();
+        this.separationWeightMonitor.setValue(separationWeight);
+        this.alignmentWeightMonitor.setValue(alignmentWeight);
+        this.cohesionWeightMonitor.setValue(cohesionWeight);
         this.boidsMonitor = new BoidsMonitor();
     }
 
@@ -60,77 +52,57 @@ public class FlockImpl implements Flock {
     }
 
     @Override
-    public  double getWidth() {
+    public double getWidth() {
         return width;
     }
 
     @Override
-    public  double getHeight() {
+    public double getHeight() {
         return height;
     }
 
     @Override
-    public  double getMaxSpeed() {
+    public double getMaxSpeed() {
         return maxSpeed;
     }
 
     @Override
-    public  double getPerceptionRadius() {
+    public double getPerceptionRadius() {
         return perceptionRadius;
     }
 
     @Override
-    public  double getAvoidRadius() {
+    public double getAvoidRadius() {
         return avoidRadius;
     }
 
     @Override
     public double getSeparationWeight() {
-        try {
-            separationMutex.lock();
-            return separationWeight;
-        } finally {
-            separationMutex.unlock();
-        }
+        return this.separationWeightMonitor.getValue();
     }
 
     @Override
-    public synchronized double getAlignmentWeight() {
-        return alignmentWeight;
+    public double getAlignmentWeight() {
+        return this.alignmentWeightMonitor.getValue();
     }
 
     @Override
     public double getCohesionWeight() {
-        try {
-            cohesionMutex.lock();
-            return cohesionWeight;
-        } finally {
-            cohesionMutex.unlock();
-        }
+        return this.cohesionWeightMonitor.getValue();
     }
 
     @Override
     public void setSeparationWeight(double separationWeight) {
-        try {
-            separationMutex.lock();
-            this.separationWeight = separationWeight;
-        } finally {
-            separationMutex.unlock();
-        }
+        this.separationWeightMonitor.setValue(separationWeight);
     }
 
     @Override
-    public synchronized void setAlignmentWeight(double alignmentWeight) {
-        this.alignmentWeight = alignmentWeight;
+    public void setAlignmentWeight(double alignmentWeight) {
+        this.alignmentWeightMonitor.setValue(alignmentWeight);
     }
 
     @Override
     public void setCohesionWeight(double cohesionWeight) {
-        try {
-            cohesionMutex.lock();
-            this.cohesionWeight = cohesionWeight;
-        } finally {
-            cohesionMutex.unlock();
-        }
+        this.cohesionWeightMonitor.setValue(cohesionWeight);
     }
 }
