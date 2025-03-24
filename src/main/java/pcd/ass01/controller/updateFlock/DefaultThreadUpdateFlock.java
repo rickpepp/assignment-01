@@ -11,7 +11,7 @@ public class DefaultThreadUpdateFlock implements UpdateFlock {
 
     public DefaultThreadUpdateFlock(Flock flock) {
         this.flock = flock;
-        this.numberOfProcessor = Runtime.getRuntime().availableProcessors();
+        this.numberOfProcessor = Runtime.getRuntime().availableProcessors() + 1;
     }
 
     @Override

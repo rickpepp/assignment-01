@@ -10,7 +10,7 @@ public class ExecutorServiceUpdateFlock implements UpdateFlock {
     private final Flock flock;
 
     public ExecutorServiceUpdateFlock(Flock flock) {
-        executor = new ForkJoinPool(Runtime.getRuntime().availableProcessors());
+        executor = new ForkJoinPool(Runtime.getRuntime().availableProcessors() + 1);
         this.flock = flock;
     }
 
