@@ -8,15 +8,25 @@ public class SequentialUpdateFlock implements UpdateFlock {
 
     private final Flock flock;
     private final BoidsFlockFunctions functions;
+    private boolean started = false;
+    private Thread thread;
 
     public SequentialUpdateFlock(Flock flock) {
         this.flock = flock;
         this.functions = new BoidsFlockFunctionsImpl();
+        this.thread = new Thread(() -> {
+            while (true)
+                this.flock.getBoids().forEach(this::updateSingleBoid);
+        });
     }
 
     @Override
     public void update() {
-        this.flock.getBoids().forEach(this::updateSingleBoid);
+        if(!started) {
+            this.started = true;
+            this.thread.start();
+        }
+        this.flock.updateFlock();
     }
 
 

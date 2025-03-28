@@ -10,6 +10,7 @@ public class FlockBuilder {
     private double separationWeight = 1;
     private double alignmentWeight = 1;
     private double cohesionWeight = 1;
+    private AbstractBoidsMonitor boidsMonitor = new BoidsMonitorWithoutSync();
 
     public Flock buildFlock() {
         return new FlockImpl(width,
@@ -19,7 +20,13 @@ public class FlockBuilder {
                 avoidRadius,
                 separationWeight,
                 alignmentWeight,
-                cohesionWeight);
+                cohesionWeight,
+                boidsMonitor);
+    }
+
+    public FlockBuilder boidsMonitor(AbstractBoidsMonitor boidsMonitor) {
+        this.boidsMonitor = boidsMonitor;
+        return this;
     }
 
     public FlockBuilder width(double width) {

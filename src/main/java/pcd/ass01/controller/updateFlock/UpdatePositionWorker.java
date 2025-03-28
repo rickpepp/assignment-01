@@ -20,7 +20,9 @@ public class UpdatePositionWorker extends Thread {
 
     @Override
     public void run() {
-        this.flock.getBoids().stream().skip(start).limit(numberOfElements).forEach(this::updateSingleBoid);
+        while (true) {
+            this.flock.getBoids().stream().skip(start).limit(numberOfElements).forEach(this::updateSingleBoid);
+        }
     }
 
     private void updateSingleBoid(Boid boid) {

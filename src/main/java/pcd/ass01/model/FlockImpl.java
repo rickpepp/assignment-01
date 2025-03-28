@@ -12,7 +12,7 @@ public class FlockImpl implements Flock {
     private final SingleValueMonitor<Double> separationWeightMonitor;
     private final SingleValueMonitor<Double> cohesionWeightMonitor;
     private final SingleValueMonitor<Double> alignmentWeightMonitor;
-    private final BoidsMonitor boidsMonitor;
+    private final AbstractBoidsMonitor boidsMonitorWithSync;
 
     public FlockImpl(double width,
                      double height,
@@ -21,7 +21,8 @@ public class FlockImpl implements Flock {
                      double avoidRadius,
                      double separationWeight,
                      double alignmentWeight,
-                     double cohesionWeight) {
+                     double cohesionWeight,
+                     AbstractBoidsMonitor boidsMonitor) {
         this.width = width;
         this.height = height;
         this.maxSpeed = maxSpeed;
@@ -33,22 +34,27 @@ public class FlockImpl implements Flock {
         this.separationWeightMonitor.setValue(separationWeight);
         this.alignmentWeightMonitor.setValue(alignmentWeight);
         this.cohesionWeightMonitor.setValue(cohesionWeight);
-        this.boidsMonitor = new BoidsMonitor();
+        this.boidsMonitorWithSync = boidsMonitor;
     }
 
     @Override
     public Collection<Boid> getBoids() {
-        return this.boidsMonitor.getBoids();
+        return this.boidsMonitorWithSync.getBoids();
     }
 
     @Override
     public void addBoid(Boid boid) {
-        this.boidsMonitor.addBoid(boid);
+        this.boidsMonitorWithSync.addBoid(boid);
     }
 
     @Override
     public void updateBoid(Boid newBoid) {
-        this.boidsMonitor.updateBoid(newBoid);
+        this.boidsMonitorWithSync.updateBoid(newBoid);
+    }
+
+    @Override
+    public void updateFlock() {
+        this.boidsMonitorWithSync.updateFlock();
     }
 
     @Override

@@ -28,9 +28,20 @@ public class BoidsModel {
                 .separationWeight(initialSeparationWeight)
                 .alignmentWeight(initialAlignmentWeight)
                 .cohesionWeight(initialCohesionWeight)
+                .boidsMonitor(createBoidsMonitor(threadMode))
                 .buildFlock();
         createRandomBoids(nBoids);
         updateFlock = createUpdateFlockFromString(threadMode);
+    }
+
+    private AbstractBoidsMonitor createBoidsMonitor(String threadMode) {
+        return switch (threadMode) {
+            case "Sequential" -> new BoidsMonitorWithSync();
+            case "Default Multithread" -> new BoidsMonitorWithSync();
+            case "Executor Framework" -> new BoidsMonitorWithoutSync();
+            case "Virtual Thread" -> new BoidsMonitorWithSync();
+            default -> throw new RuntimeException("Update Flock not Initialized");
+        };
     }
 
     private UpdateFlock createUpdateFlockFromString(String threadMode) {

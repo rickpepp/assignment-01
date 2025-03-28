@@ -7,6 +7,7 @@ public interface Flock {
     public Collection<Boid> getBoids();
     public void addBoid(Boid boid);
     public void updateBoid(Boid newBoid);
+    public void updateFlock();
     public double getWidth();
     public double getHeight();
     public double getMaxSpeed();

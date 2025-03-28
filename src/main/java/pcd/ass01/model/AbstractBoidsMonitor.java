@@ -5,13 +5,12 @@ import java.util.Collection;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class BoidsMonitor {
+public abstract class AbstractBoidsMonitor {
+    protected final Lock boidsMutex;
+    protected Collection<Boid> boids;
+    protected final Collection<Boid> tempNewBoids;
 
-    private final Lock boidsMutex;
-    private Collection<Boid> boids;
-    private final Collection<Boid> tempNewBoids;
-
-    public BoidsMonitor() {
+    public AbstractBoidsMonitor() {
         this.boidsMutex = new ReentrantLock();
         this.boids = new ArrayList<>();
         this.tempNewBoids = new ArrayList<>();
@@ -35,17 +34,6 @@ public class BoidsMonitor {
         }
     }
 
-    public void updateBoid(Boid newBoid) {
-        try {
-            boidsMutex.lock();
-            tempNewBoids.add(newBoid);
-            if (tempNewBoids.size() == boids.size()) {
-                boids = new ArrayList<>(tempNewBoids);
-                tempNewBoids.clear();
-            }
-        } finally {
-            boidsMutex.unlock();
-        }
-    }
-
+    public abstract void updateBoid(Boid newBoid);
+    public abstract void updateFlock();
 }
